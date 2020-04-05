@@ -13,10 +13,10 @@ class GroupApi {
         return httpService.post(url, group, callback);
     }
 
-    static updateGroupName(pid, gid, callback) {
+    static updateGroupName(pid, gid, group, callback) {
         let url = 'project/${pid}/group/${gid}';
 
-        return httpService.put(url, callback);
+        return httpService.put(url, group, callback);
     }
 
     static deleteGroup(pid, gid, callback) {
