@@ -1,5 +1,5 @@
-import url from '../constants/urls';
 import URLS from '../constants/urls';
+
 class HttpService {
     handleResponse(xhr, callbackSuccess, callbackError = null) {
         xhr.onloadend = function() {
