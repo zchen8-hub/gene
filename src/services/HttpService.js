@@ -62,7 +62,7 @@ class HttpService {
         var js = JSON.stringify(data)
 
         xhr.open('DELETE', url, true);
-        xhr.send();
+        xhr.send(js);
         this.handleResponse(xhr, callback);
 
         return xhr;
