@@ -34,6 +34,8 @@ class HttpService {
         var js = JSON.stringify(data)
 
         xhr.open('POST', url, true);
+
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(js);
 
         this.handleResponse(xhr, callback);
@@ -59,10 +61,9 @@ class HttpService {
         let xhr = new XMLHttpRequest();
         const url = URLS.api_url + path;
 
-        var js = JSON.stringify(data)
 
         xhr.open('DELETE', url, true);
-        xhr.send(js);
+        xhr.send();
         this.handleResponse(xhr, callback);
 
         return xhr;
