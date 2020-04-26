@@ -26,7 +26,6 @@ export default function SelectProject() {
             {
                 title: 'Name',
                 field: 'name',
-                render: rowData => <a href="#" onClick={fetchData(rowData)}>{rowData.name}</a>
             },
             {
                 title: 'Creator',
@@ -39,10 +38,6 @@ export default function SelectProject() {
             { name: 'Zerya Betül', creator: 'Baran', projectId: '2' },
         ],
     });
-
-    function fetchData(rowData) {
-        console.log("Project " + rowData.projectId + " clicked!");
-    }
 
     const useStyles = makeStyles((theme) => ({
         container: {
@@ -82,14 +77,11 @@ export default function SelectProject() {
                 options={{
                     actionsColumnIndex: -1
                 }}
-                actions={[
-                    // {
-                    //     icon: 'add',
-                    //     tooltip: 'Create Project',
-                    //     isFreeAction: true,
-                    //     onClick: (event) => alert("You want to add a new row")
-                    // }
-                ]}
+                onRowClick={(
+                    (event, selectedRow) => {
+                        //fetchAPI
+                        alert(selectedRow.projectId);
+                    })}
                 editable={{
                     onRowAdd: (newData) =>
                         new Promise((resolve) => {
