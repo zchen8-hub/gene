@@ -1,77 +1,135 @@
 import React from 'react';
-import './css/SelectProject.css';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
+import MaterialTable from 'material-table';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
+import { forwardRef } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-    demo: {
-        backgroundColor: theme.palette.background.paper,
-    },
-    title: {
-        margin: theme.spacing(4, 0, 2),
-    },
-    container: {
-        marginTop: theme.spacing(12),
-        display: 'block'
-    }
-}));
-
-function generate(element) {
-    return [0, 1, 2].map((value) =>
-        React.cloneElement(element, {
-            key: value,
-        }),
-    );
-}
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 
 export default function SelectProject() {
+    const [state, setState] = React.useState({
+        columns: [
+            {
+                title: 'Name',
+                field: 'name',
+                render: rowData => <a href="#" onClick={fetchData(rowData)}>{rowData.name}</a>
+            },
+            {
+                title: 'Creator',
+                field: 'creator',
+                editable: 'never'
+            },
+        ],
+        data: [
+            { name: 'Mehmet', creator: 'Baran', projectId: '1' },
+            { name: 'Zerya Betül', creator: 'Baran', projectId: '2' },
+        ],
+    });
+
+    function fetchData(rowData) {
+        console.log("Project " + rowData.projectId + " clicked!");
+    }
+
+    const useStyles = makeStyles((theme) => ({
+        container: {
+            marginTop: theme.spacing(9)
+        },
+    }));
+
+    const tableIcons = {
+        Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+        Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+        Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+        Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+        DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+        Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+        Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+        Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+        FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+        LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+        NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+        PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+        ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+        Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+        SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+        ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+        ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+    };
+
     const classes = useStyles();
-    const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false);
 
     return (
         <Container maxWidth="sm" className={classes.container}>
-            <Paper elevation={3} />
-            <Typography variant="h4" className={classes.title} align="center">
-                Projects
-            </Typography>
-            <div className={classes.demo}>
-                <List dense={dense}>
-                    {generate(
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <FolderIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="Single-line item"
-                                secondary={secondary ? 'Secondary text' : null}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                                <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>,
-                    )}
-                </List>
-            </div>
+            <MaterialTable
+                icons={tableIcons}
+                title="Projects"
+                columns={state.columns}
+                data={state.data}
+                options={{
+                    actionsColumnIndex: -1
+                }}
+                actions={[
+                    // {
+                    //     icon: 'add',
+                    //     tooltip: 'Create Project',
+                    //     isFreeAction: true,
+                    //     onClick: (event) => alert("You want to add a new row")
+                    // }
+                ]}
+                editable={{
+                    onRowAdd: (newData) =>
+                        new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve();
+                                setState((prevState) => {
+                                    const data = [...prevState.data];
+                                    data.push(newData);
+                                    //Creator should always be the login user.
+                                    data[data.length - 1].creator = "George";
+                                    return { ...prevState, data };
+                                });
+                            }, 600);
+                        }),
+                    onRowUpdate: (newData, oldData) =>
+                        new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve();
+                                if (oldData) {
+                                    setState((prevState) => {
+                                        const data = [...prevState.data];
+                                        data[data.indexOf(oldData)] = newData;
+                                        return { ...prevState, data };
+                                    });
+                                }
+                            }, 600);
+                        }),
+                    onRowDelete: (oldData) =>
+                        new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve();
+                                setState((prevState) => {
+                                    const data = [...prevState.data];
+                                    data.splice(data.indexOf(oldData), 1);
+                                    return { ...prevState, data };
+                                });
+                            }, 600);
+                        }),
+                }}
+            />
         </Container>
-    )
+    );
 }
