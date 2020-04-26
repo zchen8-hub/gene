@@ -1,5 +1,5 @@
 const URLS = {
-    api_url: '/api'
+    api_url: '/api/'
 }
 
 export default URLS

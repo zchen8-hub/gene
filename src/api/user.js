@@ -7,10 +7,10 @@ class UserApi {
         return httpService.post(url, user, callback)
     }
 
-    static login(callback) {
+    static login(user, callback) {
         let url = 'user/login';
 
-        return httpService.get(url, callback)
+        return httpService.post(url, user, callback)
     }
 }
 
