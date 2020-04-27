@@ -48,12 +48,7 @@ class Project extends Component {
                     <Card className="column">
                         <CardHeader>
 
-                        </CardHeader>
                         <CardContent>
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
                             <Transaction />
                         </CardContent>
                         <CardActions>
