@@ -1,0 +1,19 @@
+.root {
+    min-width: 275px;
+    max-width: 345px;
+}
+
+.bullet {
+    display: "inline-block";
+    margin: '0 2px';
+    transform: 'scale(0.8)';
+}
+
+.title {
+    margin-top: 16px;
+    font-size: 14;
+}
+
+.pos {
+    margin-bottom: 12,
+}

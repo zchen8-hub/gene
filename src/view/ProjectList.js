@@ -1,8 +1,8 @@
-import React, { Component,forwardRef } from 'react';
+import React, { Component, forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import { useParams,withRouter} from "react-router-dom";
+import { useParams, withRouter } from "react-router-dom";
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -22,39 +22,39 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import projectApi from '../api/project';
 
 class ProjectList extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             projects: [],
             isLoading: true
         }
-        
+
     }
 
-    componentDidMount(){
+    componentDidMount() {
         debugger;
-        const userId =  this.props.match.params.userId;
-        projectApi.listAllProject(userId,(response)=>{
+        const userId = this.props.match.params.userId;
+        projectApi.listAllProject(userId, (response) => {
             this.setState(
                 {
-                    projects:response.data,
-                    isLoading:false
-            }); 
+                    projects: response.data,
+                    isLoading: false
+                });
         });
-    } 
+    }
 
-    createProject(listname){
+    createProject(listname) {
         const project = {
-            projectName : listname.name
+            projectName: listname.name
         }
-        projectApi.createproject(this.props.match.params.userId, project, (response)=>{
+        projectApi.createproject(this.props.match.params.userId, project, (response) => {
             window.location.reload(true);
         })
     }
 
-    deleteProject(projectId){
+    deleteProject(projectId) {
         debugger;
-        projectApi.deleteProject(this.props.match.params.userId, projectId,(response)=>{
+        projectApi.deleteProject(this.props.match.params.userId, projectId, (response) => {
             window.location.reload(true);
         })
 
@@ -99,11 +99,11 @@ class ProjectList extends Component {
                 editable: 'never'
             },
         ];
-        
-        let {isLoading,projects} = this.state;
+
+        let { isLoading, projects } = this.state;
         const projectList = [];
-        
-        if(projects){
+
+        if (projects) {
             projects.forEach(project => {
                 projectList.push(
                     {
@@ -111,73 +111,73 @@ class ProjectList extends Component {
                         "creator": this.props.location.state.username,
                         "projectId": project.projectId
                     }
-              )
+                )
             });
         }
-        
+
         return (
             <Container maxWidth="sm" className={classes.container}>
                 {
-            isLoading?
-            <div className="row">Loading...</div>
-            :
-            <MaterialTable
-                    icons={tableIcons}
-                    title="Projects"
-                    columns={columns}
-                    data={projectList}
-                    options={{
-                        actionsColumnIndex: -1
-                    }}
-                    onRowClick={(
-                        (event, selectedRow) => {
-                            //fetchAPI
-                            alert(selectedRow.projectId);
-                    })}
-                    editable={{
-                        onRowAdd: (newData) =>
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    this.setState((prevState) => {
-                                        const project = [...prevState.projects];
-                                        this.createProject(newData);
-                                        projects.push(newData);
-                                        //Creator should always be the login user.
-                                        projects[project.length - 1].creator = this.props.location.state.username;
-                                        return { ...prevState, projects };
-                                    });
-                                }, 600);
-                            }),
-                        onRowUpdate: (newData, oldData) =>
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    if (oldData) {
-                                        this.setState((prevState) => {
-                                            const data = [...prevState.data];
-                                            data[data.indexOf(oldData)] = newData;
-                                            return { ...prevState, data };
-                                        });
-                                    }
-                                }, 600);
-                            }),
-                        onRowDelete: (oldData) =>
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    this.setState((prevState) => {
-                                        this.deleteProject(oldData.projectId);
-                                        const data = [...prevState.data];
-                                        data.splice(data.indexOf(oldData), 1);
-                                        return { ...prevState, data };
-                                    });
-                                }, 600);
-                            }),
-                    }}
-                />
-        }
-                    
+                    isLoading ?
+                        <div className="row">Loading...</div>
+                        :
+                        <MaterialTable
+                            icons={tableIcons}
+                            title="Projects"
+                            columns={columns}
+                            data={projectList}
+                            options={{
+                                actionsColumnIndex: -1
+                            }}
+                            onRowClick={(
+                                (event, selectedRow) => {
+                                    //fetchAPI
+                                    alert(selectedRow.projectId);
+                                })}
+                            editable={{
+                                onRowAdd: (newData) =>
+                                    new Promise((resolve) => {
+                                        setTimeout(() => {
+                                            resolve();
+                                            this.setState((prevState) => {
+                                                const project = [...prevState.projects];
+                                                this.createProject(newData);
+                                                projects.push(newData);
+                                                //Creator should always be the login user.
+                                                projects[project.length - 1].creator = this.props.location.state.username;
+                                                return { ...prevState, projects };
+                                            });
+                                        }, 600);
+                                    }),
+                                onRowUpdate: (newData, oldData) =>
+                                    new Promise((resolve) => {
+                                        setTimeout(() => {
+                                            resolve();
+                                            if (oldData) {
+                                                this.setState((prevState) => {
+                                                    const data = [...prevState.data];
+                                                    data[data.indexOf(oldData)] = newData;
+                                                    return { ...prevState, data };
+                                                });
+                                            }
+                                        }, 600);
+                                    }),
+                                onRowDelete: (oldData) =>
+                                    new Promise((resolve) => {
+                                        setTimeout(() => {
+                                            resolve();
+                                            this.setState((prevState) => {
+                                                this.deleteProject(oldData.projectId);
+                                                const data = [...prevState.data];
+                                                data.splice(data.indexOf(oldData), 1);
+                                                return { ...prevState, data };
+                                            });
+                                        }, 600);
+                                    }),
+                            }}
+                        />
+                }
+
             </Container>
         );
     }

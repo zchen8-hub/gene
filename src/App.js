@@ -5,6 +5,7 @@ import SignIn from './view/SignIn';
 import SignUp from './view/SignUp';
 import ProjectList from './view/ProjectList';
 import ProjectBoard from './view/ProjectBoard';
+import Transaction from './view/Transaction';
 
 function App() {
     return (
@@ -22,6 +23,12 @@ function App() {
                     exact component={ProjectBoard}>
                     <ProjectBoard />
                 </Route>
+
+                <Route path="/Transaction"
+                    exact component={Transaction}>
+                    <Transaction />
+                </Route>
+
                 <Route path="/"
                     exact component={SignIn} >
                     <SignIn />

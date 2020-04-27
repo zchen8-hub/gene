@@ -44,13 +44,13 @@ class SignIn extends Component {
             password
         }
 
-        debugger;
         userApi.login(user, (response) => {
-            this.setState({ userId: response.data.uid });
-            console.log("success");
-            this.setState({ redirect: true });
+            if (response.data) {
+                this.setState({ userId: response.data.uid });
+                console.log("success");
+                this.setState({ redirect: true });
+            }
         })
-        debugger;
     }
 
     render() {
@@ -58,7 +58,7 @@ class SignIn extends Component {
         if (this.state.redirect) {
             return <Redirect to={
                 {
-                    pathname: `/Project/${this.state.userId}`,
+                    pathname: `/ProjectList/${this.state.userId}`,
                     state: {
                         username: this.state.username
                     }
