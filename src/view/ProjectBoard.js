@@ -31,11 +31,11 @@ class Project extends Component {
             this.setState({groupList: response.data});
         })
 
-        this.groupList.forEach(group => {
+        /*groupList.forEach(group => {
             transactionApi.listAllTransaction(group.groupId,(response)=>{
                 group.transactionList = response.data;
             })
-        });
+        });*/
     }
 
     addGroup(projectId,groupname){
