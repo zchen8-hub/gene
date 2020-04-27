@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router-dom'
 
 import CopyRight from "../components/copyright";
 import useStyles from "../components/useStyles";
@@ -43,24 +43,21 @@ class SignIn extends Component {
             password
         }
 
-        debugger;
         userApi.login(user, (response) => {
-            this.setState({ userId: response.uid });
+            this.setState({ userId: response.data.uid });
             console.log("success");
             this.setState({ redirect: true });
         })
-
+        debugger;
     }
 
     render() {
         const classes = useStyles;
-
         if (this.state.redirect) {
             return <Redirect to = {
                 {
-                    pathname: '/Project',
+                    pathname: `/Project/${this.state.userId}`,
                     state: {
-                        userId: this.state.userId,
                         username: this.state.username
                     }
                 }

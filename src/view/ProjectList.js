@@ -26,20 +26,6 @@ class ProjectList extends Component {
         this.state = {
             projects: [],
             isLoading: true,
-            user: {
-                userId: this.props.location.state.userId,
-                username: this.props.location.state.username
-            },
-            columns: [{
-                    title: 'Name',
-                    field: 'name',
-                },
-                {
-                    title: 'Creator',
-                    field: 'creator',
-                    editable: 'never'
-                },
-            ],
             data: [
                 { name: 'Mehmet', creator: 'Baran', projectId: '1' },
                 { name: 'Zerya Betül', creator: 'Baran', projectId: '2' },
@@ -49,8 +35,14 @@ class ProjectList extends Component {
     }
 
     componentDidMount() {
-        return projectApi.listAllProject(this.state.user.userId, (response) => {
-            this.setState({ projects: response.data });
+        debugger;
+        const { userId } = this.props.match.params;
+        debugger;
+        return projectApi.listAllProject(userId, (response) => {
+            this.setState({
+                projects: response.data,
+                isLoading: false
+            });
         });
     }
 
@@ -116,9 +108,21 @@ class ProjectList extends Component {
                                                                                             ref = { ref }
                                                                                             />)
                                                                                         };
-                                                                                        let { isLoading, Projects } = this.state;
-                                                                                        const ProjectList = [];
 
+                                                                                        const columns = [{
+                                                                                                title: 'Name',
+                                                                                                field: 'name',
+                                                                                            },
+                                                                                            {
+                                                                                                title: 'Creator',
+                                                                                                field: 'creator',
+                                                                                                editable: 'never'
+                                                                                            },
+                                                                                        ];
+
+                                                                                        let { isLoading, Projects } = this.state;
+
+                                                                                        const ProjectList = [];
                                                                                         if (Projects) {
                                                                                             Projects.forEach(project => {
                                                                                                 this.setState(prevState => ({
@@ -131,69 +135,73 @@ class ProjectList extends Component {
                                                                                             });
                                                                                         }
 
-                                                                                        debugger;
                                                                                         return ( <
                                                                                             Container maxWidth = "sm"
-                                                                                            className = { classes.container } >
-                                                                                            <
-                                                                                            MaterialTable icons = { tableIcons }
-                                                                                            title = "Projects"
-                                                                                            columns = { this.state.columns }
-                                                                                            data = { this.state.data }
-                                                                                            options = {
-                                                                                                {
-                                                                                                    actionsColumnIndex: -1
+                                                                                            className = { classes.container } > {
+                                                                                                isLoading ?
+                                                                                                <
+                                                                                                div className = "row" > loading < /div> :
+                                                                                                    <
+                                                                                                    MaterialTable
+                                                                                                icons = { tableIcons }
+                                                                                                title = "Projects"
+                                                                                                columns = { columns }
+                                                                                                data = { this.state.projects }
+                                                                                                options = {
+                                                                                                    {
+                                                                                                        actionsColumnIndex: -1
+                                                                                                    }
                                                                                                 }
-                                                                                            }
-                                                                                            onRowClick = {
-                                                                                                (
-                                                                                                    (event, selectedRow) => {
-                                                                                                        //fetchAPI
-                                                                                                        alert(selectedRow.projectId);
-                                                                                                    })
-                                                                                            }
-                                                                                            editable = {
-                                                                                                {
-                                                                                                    onRowAdd: (newData) =>
-                                                                                                        new Promise((resolve) => {
-                                                                                                            setTimeout(() => {
-                                                                                                                resolve();
-                                                                                                                this.setState((prevState) => {
-                                                                                                                    const data = [...prevState.data];
-                                                                                                                    data.push(newData);
-                                                                                                                    //Creator should always be the login user.
-                                                                                                                    data[data.length - 1].creator = "George";
-                                                                                                                    return {...prevState, data };
-                                                                                                                });
-                                                                                                            }, 600);
-                                                                                                        }),
-                                                                                                    onRowUpdate: (newData, oldData) =>
-                                                                                                        new Promise((resolve) => {
-                                                                                                            setTimeout(() => {
-                                                                                                                resolve();
-                                                                                                                if (oldData) {
+                                                                                                onRowClick = {
+                                                                                                    (
+                                                                                                        (event, selectedRow) => {
+                                                                                                            //fetchAPI
+                                                                                                            alert(selectedRow.projectId);
+                                                                                                        })
+                                                                                                }
+                                                                                                editable = {
+                                                                                                    {
+                                                                                                        onRowAdd: (newData) =>
+                                                                                                            new Promise((resolve) => {
+                                                                                                                setTimeout(() => {
+                                                                                                                    resolve();
                                                                                                                     this.setState((prevState) => {
                                                                                                                         const data = [...prevState.data];
-                                                                                                                        data[data.indexOf(oldData)] = newData;
+                                                                                                                        data.push(newData);
+                                                                                                                        //Creator should always be the login user.
+                                                                                                                        data[data.length - 1].creator = "George";
                                                                                                                         return {...prevState, data };
                                                                                                                     });
-                                                                                                                }
-                                                                                                            }, 600);
-                                                                                                        }),
-                                                                                                    onRowDelete: (oldData) =>
-                                                                                                        new Promise((resolve) => {
-                                                                                                            setTimeout(() => {
-                                                                                                                resolve();
-                                                                                                                this.setState((prevState) => {
-                                                                                                                    const data = [...prevState.data];
-                                                                                                                    data.splice(data.indexOf(oldData), 1);
-                                                                                                                    return {...prevState, data };
-                                                                                                                });
-                                                                                                            }, 600);
-                                                                                                        }),
+                                                                                                                }, 600);
+                                                                                                            }),
+                                                                                                        onRowUpdate: (newData, oldData) =>
+                                                                                                            new Promise((resolve) => {
+                                                                                                                setTimeout(() => {
+                                                                                                                    resolve();
+                                                                                                                    if (oldData) {
+                                                                                                                        this.setState((prevState) => {
+                                                                                                                            const data = [...prevState.data];
+                                                                                                                            data[data.indexOf(oldData)] = newData;
+                                                                                                                            return {...prevState, data };
+                                                                                                                        });
+                                                                                                                    }
+                                                                                                                }, 600);
+                                                                                                            }),
+                                                                                                        onRowDelete: (oldData) =>
+                                                                                                            new Promise((resolve) => {
+                                                                                                                setTimeout(() => {
+                                                                                                                    resolve();
+                                                                                                                    this.setState((prevState) => {
+                                                                                                                        const data = [...prevState.data];
+                                                                                                                        data.splice(data.indexOf(oldData), 1);
+                                                                                                                        return {...prevState, data };
+                                                                                                                    });
+                                                                                                                }, 600);
+                                                                                                            }),
+                                                                                                    }
                                                                                                 }
-                                                                                            }
-                                                                                            /> <
+                                                                                                />
+                                                                                            } <
                                                                                             /Container>
                                                                                         );
                                                                                     }
