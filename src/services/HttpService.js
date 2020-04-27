@@ -34,6 +34,7 @@ class HttpService {
         console.log(url);
 
         var js = JSON.stringify(data)
+        console.log(js);
 
         xhr.open('POST', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');

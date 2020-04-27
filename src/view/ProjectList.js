@@ -49,9 +49,7 @@ class ProjectList extends Component {
     }
 
     componentDidMount() {
-        debugger;
         const { userId } = this.props.match.params;
-        debugger;
         return projectApi.listAllProject(userId, (response) => {
             this.setState({
                 projects: response.data,

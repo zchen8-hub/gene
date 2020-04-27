@@ -49,29 +49,39 @@ class SignIn extends Component {
             console.log("success");
             this.setState({ redirect: true });
         })
-
-        //fetch("http://127.0.0.1:8080/api/user/login")
+        // debugger;
+        // fetch("http://127.0.0.1:8080/api/user/login", {
+        //     method: 'POST',
+        //     body: JSON.stringify(user),
+        //     headers: new Headers({
+        //         'Content-Type': 'application/json'
+        //     })})  
+        //     .then(res => res.json())
+        //     .then(
+        //         (result) => {
+        //             console.log(result);
+        //         }
+        //     )
     }
 
     render() {
-
         if (this.state.redirect) {
             return <Redirect to={
                 {
-                    pathname: '/Project',
+                    pathname: '/Project/${this.state.userId}',
                     state: {
                         userId: this.state.userId,
                         username: this.state.username
                     }
                 }
-            }/>;
+            } />;
         }
 
         return (
             <Container component="main" maxWidth="xs" >
                 <CssBaseline />
                 <div className="paper" >
-                    <Avatar className="avatar" style={{backgroundColor: 'rgb(220, 0, 78)'}}>
+                    <Avatar className="avatar" style={{ backgroundColor: 'rgb(220, 0, 78)' }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5" >
@@ -95,18 +105,18 @@ class SignIn extends Component {
                             value={this.password}
                             onChange={this.onChange}
                             autoComplete="current-password" />
-                        <FormControlLabel 
-                            control={< Checkbox value="remember" color="primary" />} 
-                            label="Remember me" 
+                        <FormControlLabel
+                            control={< Checkbox value="remember" color="primary" />}
+                            label="Remember me"
                         />
-                        <Button 
+                        <Button
                             type="submit"
-                            fullWidth 
+                            fullWidth
                             variant="contained"
                             color="primary"
-                            style={{marginTop: '24px', marginBottom: '16px'}}
+                            style={{ marginTop: '24px', marginBottom: '16px' }}
                             onClick={this.handleSignIn} >
-                            Sign In 
+                            Sign In
                         </Button>
                         <Grid container >
                             <Grid item xs >
