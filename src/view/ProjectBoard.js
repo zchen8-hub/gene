@@ -9,7 +9,7 @@ import './css/ProjectBoard.css';
 import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Transaction from './Transaction';
-
+import Icon from '@material-ui/core/Icon';
 
 class Project extends React.Component {
 
@@ -21,7 +21,6 @@ class Project extends React.Component {
     }
 
     render() {
-
         return (
             <div className="root">
                 <AppBar position="static">
@@ -35,12 +34,34 @@ class Project extends React.Component {
                         <Button color="inherit">Login</Button>
                     </Toolbar>
                 </AppBar>
-                <Container className="container" style={{display: 'flex'}}>
-                    <Card className="column">
-                        <CardHeader>
-
-                        </CardHeader>
-                        <CardContent>
+                <div className="container" style={{ display: 'flex' }}>
+                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
+                        <CardContent style={{ paddingBottom: '0' }}>
+                            <Button>TO DO</Button>
+                        </CardContent>
+                        <CardContent style={{ paddingTop: '0' }}>
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                        </CardContent>
+                        <CardActions>
+                            <Button
+                                variant="contained"
+                                color="inherit"
+                                startIcon={<Icon>send</Icon>}
+                                style={{backgroundColor: '#F4F5F7'}}
+                            >
+                                Send
+                            </Button>
+                        </CardActions>
+                    </Card>
+                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
+                        <CardContent style={{ paddingBottom: '0' }}>
+                            <Button>IN PROGRESS</Button>
+                        </CardContent>
+                        <CardContent style={{ paddingTop: '0' }}>
                             <Transaction />
                             <Transaction />
                             <Transaction />
@@ -51,11 +72,11 @@ class Project extends React.Component {
 
                         </CardActions>
                     </Card>
-                    <Card className="column">
-                        <CardHeader>
-
-                        </CardHeader>
-                        <CardContent>
+                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
+                        <CardContent style={{ paddingBottom: '0' }}>
+                            <Button>DONE</Button>
+                        </CardContent>
+                        <CardContent style={{ paddingTop: '0' }}>
                             <Transaction />
                             <Transaction />
                             <Transaction />
@@ -66,7 +87,7 @@ class Project extends React.Component {
 
                         </CardActions>
                     </Card>
-                </Container>
+                </div>
             </div>
         )
     }
