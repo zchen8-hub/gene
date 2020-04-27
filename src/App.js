@@ -34,22 +34,23 @@ function App() {
         /Route>
 
         <
-        Route path = "/Project" >
-        <
-        ProjectList / >
-        <
-        /Route>
+        Route path = "/Project/:userId"
+        render = {
+            props => < ProjectList {...props }
+            key = { this.props.location.key }
+            /> }> <
+            /Route>
 
-        <
-        Route path = "/" >
-        <
-        SignIn / >
-        <
-        /Route>
+            <
+            Route path = "/" >
+            <
+            SignIn / >
+            <
+            /Route>
 
-        <
-        /Switch>
-    );
-}
+            <
+            /Switch>
+        );
+    }
 
-export default App;
+    export default App;

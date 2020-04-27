@@ -49,8 +49,14 @@ class ProjectList extends Component {
     }
 
     componentDidMount() {
-        return projectApi.listAllProject(this.state.user.userId, (response) => {
-            this.setState({ projects: response.data });
+        debugger;
+        const { userId } = this.props.match.params;
+        debugger;
+        return projectApi.listAllProject(userId, (response) => {
+            this.setState({
+                projects: response.data,
+                isLoading: false
+            });
         });
     }
 

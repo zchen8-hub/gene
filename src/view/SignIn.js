@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router-dom'
 import './css/SignIn.css';
 
 import CopyRight from "../components/copyright";
@@ -50,6 +50,7 @@ class SignIn extends Component {
             this.setState({ redirect: true });
         })
 
+        //fetch("http://127.0.0.1:8080/api/user/login")
     }
 
     render() {
