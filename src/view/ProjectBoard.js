@@ -22,83 +22,54 @@ class Project extends React.Component {
 
     render() {
 
-        return ( <
-            div className = "root" >
-            <
-            AppBar position = "static" >
-            <
-            Toolbar >
-            <
-            IconButton edge = "start"
-            className = "menuButton"
-            color = "inherit"
-            aria - label = "menu" >
-            <
-            MenuIcon / >
-            <
-            /IconButton> <
-            Typography variant = "h6"
-            className = "title" >
-            (
-                default project) <
-            /Typography> <
-            Button color = "inherit" > Login < /Button> <
-            /Toolbar> <
-            /AppBar> <
-            Container >
-            <
-            Card className = "column" >
-            <
-            CardHeader >
+        return (
+            <div className="root">
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton edge="start" className="menuButton" color="inherit" aria-label="menu">
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" className="title">
+                            (default project)
+                        </Typography>
+                        <Button color="inherit">Login</Button>
+                    </Toolbar>
+                </AppBar>
+                <Container>
+                    <Card className="column">
+                        <CardHeader>
 
-            <
-            /CardHeader> <
-            CardContent >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            /CardContent> <
-            CardActions >
+                        </CardHeader>
+                        <CardContent>
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                        </CardContent>
+                        <CardActions>
 
-            <
-            /CardActions> <
-            /Card> <
-            Card className = "column" >
-            <
-            CardHeader >
+                        </CardActions>
+                    </Card>
+                    <Card className="column">
+                        <CardHeader>
 
-            <
-            /CardHeader> <
-            CardContent >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            Transaction / >
-            <
-            /CardContent> <
-            CardActions >
+                        </CardHeader>
+                        <CardContent>
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                            <Transaction />
+                        </CardContent>
+                        <CardActions>
 
-            <
-            /CardActions> <
-            /Card> <
-            /Container> <
-            /div>
+                        </CardActions>
+                    </Card>
+                </Container>
+            </div>
         )
     }
 }
 
-export default withRouter(Project);
+export default Project;
