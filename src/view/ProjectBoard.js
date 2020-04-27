@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +12,11 @@ import Transaction from './Transaction';
 import Icon from '@material-ui/core/Icon';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
-class Project extends React.Component {
+import transactionApi from '../api/transaction'
+import groupApi from '../api/group'
+import { withRouter } from "react-router-dom";
+
+class Project extends Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +24,14 @@ class Project extends React.Component {
 
         }
     }
+    componentDidMount(){
+        const projectId = this.props.match.params.projectId;
+        debugger;
+        groupApi.listAllGroups(projectId,(response)=>{
 
+        })
+        transactionApi.listAllTransaction()
+    }
     render() {
         return (
             <div className="root">
@@ -30,9 +41,9 @@ class Project extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" className="title">
-                            (default project)
+                            {this.props.location.state.projectName}
                         </Typography>
-                        <Button color="inherit">Login</Button>
+                        <Button color="inherit">Logout</Button>
                     </Toolbar>
                 </AppBar>
                 <div className="container" style={{ display: 'flex' }}>
@@ -73,11 +84,11 @@ class Project extends React.Component {
 
                         </CardActions>
                     </Card>
-                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
-                        <CardContent style={{ paddingBottom: '0' }}>
-                            <Button>DONE</Button>
-                        </CardContent>
-                        <CardContent style={{ paddingTop: '0' }}>
+                    <Card className="column">
+                        <CardHeader>
+
+                        </CardHeader>
+                        <CardContent>
                             <Transaction />
                             <Transaction />
                             <Transaction />
@@ -92,6 +103,6 @@ class Project extends React.Component {
             </div>
         )
     }
-}
+};
 
-export default Project;
+export default withRouter(Project);

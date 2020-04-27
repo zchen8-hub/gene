@@ -2,7 +2,8 @@ import React, { Component, forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import { useParams, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { Redirect } from 'react-router-dom'
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -26,7 +27,11 @@ class ProjectList extends Component {
         super(props);
         this.state = {
             projects: [],
-            isLoading: true
+            isLoading: true,
+            redirect: false,
+            projectId:'',
+            projectName:'',
+            groupList: []
         }
 
     }
@@ -109,10 +114,21 @@ class ProjectList extends Component {
                     {
                         "name": project.projectName,
                         "creator": this.props.location.state.username,
-                        "projectId": project.projectId
+                        "projectId": project.projectId,
+                        "groupList": project.groupList
                     }
                 )
             });
+        }
+
+        if(this.state.redirect){
+            return <Redirect to= {{
+                pathname: `/ProjectBoard/${this.state.projectId}`,
+                state: { 
+                    groupList: this.state.groupList,
+                    projectName: this.state.projectName
+                  }
+            }} />; 
         }
 
         return (
@@ -132,7 +148,14 @@ class ProjectList extends Component {
                             onRowClick={(
                                 (event, selectedRow) => {
                                     //fetchAPI
-                                    alert(selectedRow.projectId);
+                                    debugger;
+                                    this.setState({
+                                        redirect: true,
+                                        projectId : selectedRow.projectId,
+                                        groupList:  selectedRow.groupList,
+                                        projectName: selectedRow.name
+
+                                    })
                                 })}
                             editable={{
                                 onRowAdd: (newData) =>

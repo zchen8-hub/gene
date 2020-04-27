@@ -22,6 +22,7 @@ class HttpService {
 
         xhr.open('GET', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log(url)
         xhr.send();
         this.handleResponse(xhr, callback);
 
