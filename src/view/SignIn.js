@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -11,11 +12,10 @@ import Link from '@material-ui/core/Link';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom'
-import './css/SignIn.css';
 
 import CopyRight from "../components/copyright";
+import useStyles from "../components/useStyles";
 import userApi from "../api/user"
-import { Button } from '@material-ui/core';
 
 class SignIn extends Component {
     constructor(props) {
@@ -32,8 +32,7 @@ class SignIn extends Component {
 
     onChange(event) {
         this.setState({
-            [event.target.name]: event.target.value
-        });
+            [event.target.name]: event.target.value });
     }
 
     handleSignIn() {
@@ -45,95 +44,106 @@ class SignIn extends Component {
         }
 
         userApi.login(user, (response) => {
-            this.setState({ userId: response.uid });
+            this.setState({ userId: response.data.uid });
             console.log("success");
             this.setState({ redirect: true });
         })
-        // debugger;
-        // fetch("http://127.0.0.1:8080/api/user/login", {
-        //     method: 'POST',
-        //     body: JSON.stringify(user),
-        //     headers: new Headers({
-        //         'Content-Type': 'application/json'
-        //     })})  
-        //     .then(res => res.json())
-        //     .then(
-        //         (result) => {
-        //             console.log(result);
-        //         }
-        //     )
+        debugger;
     }
 
     render() {
+        const classes = useStyles;
         if (this.state.redirect) {
-            return <Redirect to={
+            return <Redirect to = {
                 {
-                    pathname: '/Project/${this.state.userId}',
+                    pathname: `/Project/${this.state.userId}`,
                     state: {
-                        userId: this.state.userId,
                         username: this.state.username
                     }
                 }
-            } />;
+            }
+            />;
         }
 
-        return (
-            <Container component="main" maxWidth="xs" >
-                <CssBaseline />
-                <div className="paper" >
-                    <Avatar className="avatar" style={{ backgroundColor: 'rgb(220, 0, 78)' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5" >
-                        Sign in
-                    </Typography>
-                    <form className="form" noValidate >
-                        <TextField variant="outlined"
-                            margin="normal"
-                            required fullWidth id="username"
-                            label="UserName"
-                            name="username"
-                            value={this.username}
-                            onChange={this.onChange}
-                            autoFocus />
-                        <TextField variant="outlined"
-                            margin="normal"
-                            required fullWidth name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            value={this.password}
-                            onChange={this.onChange}
-                            autoComplete="current-password" />
-                        <FormControlLabel
-                            control={< Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            style={{ marginTop: '24px', marginBottom: '16px' }}
-                            onClick={this.handleSignIn} >
-                            Sign In
-                        </Button>
-                        <Grid container >
-                            <Grid item xs >
-                                <Link href="#" variant="body2" >
-                                    Forgot password ?
-                                </Link>
-                            </Grid>
-                            <Grid item >
-                                <Link href="./SignUp" variant="body2" > {"Don't have an account? Sign Up"} </Link>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </div>
-                <Box mt={8} >
-                    <CopyRight />
-                </Box>
-            </Container>
+        return ( <
+            Container component = "main"
+            maxWidth = "xs" >
+            <
+            CssBaseline / >
+            <
+            div className = { classes.paper } >
+            <
+            Avatar className = { classes.avatar } >
+            <
+            LockOutlinedIcon / >
+            <
+            /Avatar> <
+            Typography component = "h1"
+            variant = "h5" >
+            Sign in
+            <
+            /Typography> <
+            form className = { classes.form }
+            noValidate >
+            <
+            TextField variant = "outlined"
+            margin = "normal"
+            required fullWidth id = "username"
+            label = "UserName"
+            name = "username"
+            value = { this.username }
+            onChange = { this.onChange }
+            autoFocus /
+            >
+            <
+            TextField variant = "outlined"
+            margin = "normal"
+            required fullWidth name = "password"
+            label = "Password"
+            type = "password"
+            id = "password"
+            value = { this.password }
+            onChange = { this.onChange }
+            autoComplete = "current-password" /
+            >
+            <
+            FormControlLabel control = { < Checkbox value = "remember"
+                color = "primary" / > }
+            label = "Remember me" /
+            >
+            <
+            Link type = "submit"
+            fullWidth variant = "contained"
+            color = "primary"
+            className = { classes.submit }
+            onClick = { this.handleSignIn } >
+            Sign In <
+            /Link> <
+            Grid container >
+            <
+            Grid item xs >
+            <
+            Link href = "#"
+            variant = "body2" >
+            Forgot password ?
+            <
+            /Link> <
+            /Grid> <
+            Grid item >
+            <
+            Link href = "./SignUp"
+            variant = "body2" > { "Don't have an account? Sign Up" } <
+            /Link> <
+            /Grid> <
+            /Grid> <
+            /form> <
+            /div> <
+            Box mt = { 8 } >
+            <
+            CopyRight / >
+            <
+            /Box> <
+            /Container>
         );
     }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import SignIn from './view/SignIn';
 import SignUp from './view/SignUp';
 import ProjectList from './view/ProjectList';
@@ -24,21 +23,33 @@ function App() {
         //     </a>
         //   </header>
         // </div>
-        <Switch >
-            <Route path="/SignUp" >
-                <SignUp />
-            </Route>
+        <
+        Router >
+        <
+        Switch >
+        <
+        Route path = "/SignUp"
+        exact component = { SignUp } >
+        <
+        SignUp / >
+        <
+        /Route> <
+        Route path = "/Project/:userId"
+        component = { ProjectList } >
+        <
+        ProjectList / >
+        <
+        /Route> <
+        Route path = "/"
+        exact component = { SignIn } >
+        <
+        SignIn / >
+        <
+        /Route> <
+        /Switch>
 
-            <Route path="/Project/:userId"
-                render={props => <ProjectList {...props} key={this.props.location.key}/>}
-            >
-            </Route>
-
-            <Route path="/" >
-                <SignIn />
-            </Route>
-
-        </Switch>
+        <
+        /Router>
     );
 }
 
