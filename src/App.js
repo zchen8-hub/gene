@@ -19,8 +19,8 @@ function App() {
                     component={ProjectList} >
                     <ProjectList />
                 </Route> 
-                <Route path="/ProjectBoard/:projectId"
-                    component={ProjectBoard}>
+                <Route path="/ProjectBoard"
+                    exact component={ProjectBoard}>
                     <ProjectBoard />
                 </Route>
 
