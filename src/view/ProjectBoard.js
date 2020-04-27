@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import './css/Project.css';
+import './css/ProjectBoard.css';
 import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Transaction from './Transaction';
@@ -35,7 +35,7 @@ class Project extends React.Component {
                         <Button color="inherit">Login</Button>
                     </Toolbar>
                 </AppBar>
-                <Container>
+                <Container className="container" style={{display: 'flex'}}>
                     <Card className="column">
                         <CardHeader>
 
