@@ -10,6 +10,7 @@ import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Transaction from './Transaction';
 import Icon from '@material-ui/core/Icon';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
 class Project extends React.Component {
 
@@ -46,14 +47,14 @@ class Project extends React.Component {
                             <Transaction />
                             <Transaction />
                         </CardContent>
-                        <CardActions>
+                        <CardActions style={{paddingLeft: '16px'}}>
                             <Button
                                 variant="contained"
                                 color="inherit"
-                                startIcon={<Icon>send</Icon>}
+                                startIcon={<SubdirectoryArrowRightIcon />}
                                 style={{backgroundColor: '#F4F5F7'}}
                             >
-                                Send
+                                Create New Transaction
                             </Button>
                         </CardActions>
                     </Card>
