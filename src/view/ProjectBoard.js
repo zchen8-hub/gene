@@ -21,17 +21,51 @@ class Project extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            groupList : []
         }
     }
-    componentDidMount(){
-        const projectId = this.props.match.params.projectId;
-        debugger;
-        groupApi.listAllGroups(projectId,(response)=>{
 
+    componentDidMount(){
+
+        groupApi.listAllGroups(this.props.match.params.projectId,(response)=>{
+            this.setState({groupList: response.data});
         })
-        transactionApi.listAllTransaction()
+
+        this.groupList.forEach(group => {
+            transactionApi.listAllTransaction(group.groupId,(response)=>{
+                group.transactionList = response.data;
+            })
+        });
     }
+
+    addGroup(projectId,groupname){
+        const group = {
+            "groupName": groupname
+        }
+        groupApi.createGroup(projectId,group,(response)=>{
+            window.location.reload(true);
+        })
+    }
+
+    deleteGroup(projectId,groupId){
+        groupApi.deleteGroup(projectId,groupId,(response)=>{
+            window.location.reload(true);
+            console.log("success");
+        })
+    }
+
+    addTransaction(groupId,transaction){
+        transactionApi.createTransaction(groupId,transaction,(response)=>{
+            window.location.reload(true);
+        })
+    }
+
+    deleteTransaction(groupId,transaction){
+        transactionApi.deleteTransaction(groupId,transaction,(response)=>{
+            window.location.reload(true);
+        })
+    }
+
     render() {
         return (
             <div className="root">
