@@ -31,14 +31,14 @@ class ProjectList extends Component {
                 username: this.props.location.state.username
             },
             columns: [{
-                    title: 'Name',
-                    field: 'name',
-                },
-                {
-                    title: 'Creator',
-                    field: 'creator',
-                    editable: 'never'
-                },
+                title: 'Name',
+                field: 'name',
+            },
+            {
+                title: 'Creator',
+                field: 'creator',
+                editable: 'never'
+            },
             ],
             data: [
                 { name: 'Mehmet', creator: 'Baran', projectId: '1' },
@@ -61,142 +61,105 @@ class ProjectList extends Component {
     }));
 
     render() {
-            const classes = this.useStyles
+        const classes = this.useStyles
 
-            const tableIcons = {
-                    Add: forwardRef((props, ref) => < AddBox {...props }
-                            ref = { ref }
-                            />),
-                            Check: forwardRef((props, ref) => < Check {...props }
-                                ref = { ref }
-                                />),
-                                Clear: forwardRef((props, ref) => < Clear {...props }
-                                    ref = { ref }
-                                    />),
-                                    Delete: forwardRef((props, ref) => < DeleteOutline {...props }
-                                        ref = { ref }
-                                        />),
-                                        DetailPanel: forwardRef((props, ref) => < ChevronRight {...props }
-                                            ref = { ref }
-                                            />),
-                                            Edit: forwardRef((props, ref) => < Edit {...props }
-                                                ref = { ref }
-                                                />),
-                                                Export: forwardRef((props, ref) => < SaveAlt {...props }
-                                                    ref = { ref }
-                                                    />),
-                                                    Filter: forwardRef((props, ref) => < FilterList {...props }
-                                                        ref = { ref }
-                                                        />),
-                                                        FirstPage: forwardRef((props, ref) => < FirstPage {...props }
-                                                            ref = { ref }
-                                                            />),
-                                                            LastPage: forwardRef((props, ref) => < LastPage {...props }
-                                                                ref = { ref }
-                                                                />),
-                                                                NextPage: forwardRef((props, ref) => < ChevronRight {...props }
-                                                                    ref = { ref }
-                                                                    />),
-                                                                    PreviousPage: forwardRef((props, ref) => < ChevronLeft {...props }
-                                                                        ref = { ref }
-                                                                        />),
-                                                                        ResetSearch: forwardRef((props, ref) => < Clear {...props }
-                                                                            ref = { ref }
-                                                                            />),
-                                                                            Search: forwardRef((props, ref) => < Search {...props }
-                                                                                ref = { ref }
-                                                                                />),
-                                                                                SortArrow: forwardRef((props, ref) => < ArrowDownward {...props }
-                                                                                    ref = { ref }
-                                                                                    />),
-                                                                                    ThirdStateCheck: forwardRef((props, ref) => < Remove {...props }
-                                                                                        ref = { ref }
-                                                                                        />),
-                                                                                        ViewColumn: forwardRef((props, ref) => < ViewColumn {...props }
-                                                                                            ref = { ref }
-                                                                                            />)
-                                                                                        };
-                                                                                        let { isLoading, Projects } = this.state;
-                                                                                        const ProjectList = [];
+        const tableIcons = {
+            Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+            Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+            Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+            Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+            DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+            Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+            Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+            Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+            FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+            LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+            NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+            PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+            ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+            Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+            SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+            ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+            ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+        };
+        let { isLoading, Projects } = this.state;
+        const ProjectList = [];
 
-                                                                                        if (Projects) {
-                                                                                            Projects.forEach(project => {
-                                                                                                this.setState(prevState => ({
-                                                                                                    projects: [{
-                                                                                                        "name": project.projectId,
-                                                                                                        "creator": this.props.location.state.username,
-                                                                                                        "projectId": '1'
-                                                                                                    }, ...prevState.myArray]
-                                                                                                }))
-                                                                                            });
-                                                                                        }
+        if (Projects) {
+            Projects.forEach(project => {
+                this.setState(prevState => ({
+                    projects: [{
+                        "name": project.projectId,
+                        "creator": this.props.location.state.username,
+                        "projectId": '1'
+                    }, ...prevState.myArray]
+                }))
+            });
+        }
 
-                                                                                        debugger;
-                                                                                        return ( <
-                                                                                            Container maxWidth = "sm"
-                                                                                            className = { classes.container } >
-                                                                                            <
-                                                                                            MaterialTable icons = { tableIcons }
-                                                                                            title = "Projects"
-                                                                                            columns = { this.state.columns }
-                                                                                            data = { this.state.data }
-                                                                                            options = {
-                                                                                                {
-                                                                                                    actionsColumnIndex: -1
-                                                                                                }
-                                                                                            }
-                                                                                            onRowClick = {
-                                                                                                (
-                                                                                                    (event, selectedRow) => {
-                                                                                                        //fetchAPI
-                                                                                                        alert(selectedRow.projectId);
-                                                                                                    })
-                                                                                            }
-                                                                                            editable = {
-                                                                                                {
-                                                                                                    onRowAdd: (newData) =>
-                                                                                                        new Promise((resolve) => {
-                                                                                                            setTimeout(() => {
-                                                                                                                resolve();
-                                                                                                                this.setState((prevState) => {
-                                                                                                                    const data = [...prevState.data];
-                                                                                                                    data.push(newData);
-                                                                                                                    //Creator should always be the login user.
-                                                                                                                    data[data.length - 1].creator = "George";
-                                                                                                                    return {...prevState, data };
-                                                                                                                });
-                                                                                                            }, 600);
-                                                                                                        }),
-                                                                                                    onRowUpdate: (newData, oldData) =>
-                                                                                                        new Promise((resolve) => {
-                                                                                                            setTimeout(() => {
-                                                                                                                resolve();
-                                                                                                                if (oldData) {
-                                                                                                                    this.setState((prevState) => {
-                                                                                                                        const data = [...prevState.data];
-                                                                                                                        data[data.indexOf(oldData)] = newData;
-                                                                                                                        return {...prevState, data };
-                                                                                                                    });
-                                                                                                                }
-                                                                                                            }, 600);
-                                                                                                        }),
-                                                                                                    onRowDelete: (oldData) =>
-                                                                                                        new Promise((resolve) => {
-                                                                                                            setTimeout(() => {
-                                                                                                                resolve();
-                                                                                                                this.setState((prevState) => {
-                                                                                                                    const data = [...prevState.data];
-                                                                                                                    data.splice(data.indexOf(oldData), 1);
-                                                                                                                    return {...prevState, data };
-                                                                                                                });
-                                                                                                            }, 600);
-                                                                                                        }),
-                                                                                                }
-                                                                                            }
-                                                                                            /> <
-                                                                                            /Container>
-                                                                                        );
-                                                                                    }
-                                                                                };
+        debugger;
+        return (
+            <Container maxWidth="sm" className={classes.container} >
+                <MaterialTable icons={tableIcons}
+                    title="Projects"
+                    columns={this.state.columns}
+                    data={this.state.data}
+                    options={
+                        {
+                            actionsColumnIndex: -1
+                        }
+                    }
+                    onRowClick={
+                        (
+                            (event, selectedRow) => {
+                                //fetchAPI
+                                alert(selectedRow.projectId);
+                            })
+                    }
+                    editable={
+                        {
+                            onRowAdd: (newData) =>
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        this.setState((prevState) => {
+                                            const data = [...prevState.data];
+                                            data.push(newData);
+                                            //Creator should always be the login user.
+                                            data[data.length - 1].creator = "George";
+                                            return { ...prevState, data };
+                                        });
+                                    }, 600);
+                                }),
+                            onRowUpdate: (newData, oldData) =>
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        if (oldData) {
+                                            this.setState((prevState) => {
+                                                const data = [...prevState.data];
+                                                data[data.indexOf(oldData)] = newData;
+                                                return { ...prevState, data };
+                                            });
+                                        }
+                                    }, 600);
+                                }),
+                            onRowDelete: (oldData) =>
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        this.setState((prevState) => {
+                                            const data = [...prevState.data];
+                                            data.splice(data.indexOf(oldData), 1);
+                                            return { ...prevState, data };
+                                        });
+                                    }, 600);
+                                }),
+                        }
+                    }
+                />
+            </Container>);
+    }
+};
 
-                                                                                export default ProjectList;
+export default ProjectList;
