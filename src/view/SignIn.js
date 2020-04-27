@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -11,23 +10,30 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
+import { Redirect } from 'react-router'
+import './css/SignIn.css';
+
 import CopyRight from "../components/copyright";
-import useStyles from "../components/useStyles";
 import userApi from "../api/user"
+import { Button } from '@material-ui/core';
 
 class SignIn extends Component {
     constructor(props) {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            userId: '',
+            redirect: false
         }
         this.onChange = this.onChange.bind(this);
         this.handleSignIn = this.handleSignIn.bind(this);
     }
 
     onChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({
+            [event.target.name]: event.target.value
+        });
     }
 
     handleSignIn() {
@@ -39,98 +45,81 @@ class SignIn extends Component {
         }
 
         userApi.login(user, (response) => {
-            alert(response.data.uid);
+            this.setState({ userId: response.uid });
+            console.log("success");
+            this.setState({ redirect: true });
         })
 
     }
 
     render() {
-        // const useStyles = makeStyles((theme) => ({
-        //     paper: {
-        //         marginTop: theme.spacing(8),
-        //         display: 'flex',
-        //         flexDirection: 'column',
-        //         alignItems: 'center',
-        //     },
-        //     avatar: {
-        //         margin: theme.spacing(1),
-        //         backgroundColor: theme.palette.secondary.main,
-        //     },
-        //     form: {
-        //         width: '100%', // Fix IE 11 issue.
-        //         marginTop: theme.spacing(1),
-        //     },
-        //     submit: {
-        //         margin: theme.spacing(3, 0, 2),
-        //     },
-        // }));
-        const classes = useStyles;
+
+        if (this.state.redirect) {
+            return <Redirect to={
+                {
+                    pathname: '/Project',
+                    state: {
+                        userId: this.state.userId,
+                        username: this.state.username
+                    }
+                }
+            }/>;
+        }
 
         return (
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs" >
                 <CssBaseline />
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
+                <div className="paper" >
+                    <Avatar className="avatar" style={{backgroundColor: 'rgb(220, 0, 78)'}}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h5" >
                         Sign in
                     </Typography>
-                    <form className={classes.form} noValidate>
-                        <TextField
-                            variant="outlined"
+                    <form className="form" noValidate >
+                        <TextField variant="outlined"
                             margin="normal"
-                            required
-                            fullWidth
-                            id="username"
+                            required fullWidth id="username"
                             label="UserName"
                             name="username"
                             value={this.username}
                             onChange={this.onChange}
-                            autoFocus
-                        />
-                        <TextField
-                            variant="outlined"
+                            autoFocus />
+                        <TextField variant="outlined"
                             margin="normal"
-                            required
-                            fullWidth
-                            name="password"
+                            required fullWidth name="password"
                             label="Password"
                             type="password"
                             id="password"
                             value={this.password}
                             onChange={this.onChange}
-                            autoComplete="current-password"
+                            autoComplete="current-password" />
+                        <FormControlLabel 
+                            control={< Checkbox value="remember" color="primary" />} 
+                            label="Remember me" 
                         />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button
+                        <Button 
                             type="submit"
-                            fullWidth
+                            fullWidth 
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
-                            onClick={this.handleSignIn}
-                        >
-                            Sign In
+                            style={{marginTop: '24px', marginBottom: '16px'}}
+                            onClick={this.handleSignIn} >
+                            Sign In 
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
+                        <Grid container >
+                            <Grid item xs >
+                                <Link href="#" variant="body2" >
+                                    Forgot password ?
                                 </Link>
                             </Grid>
-                            <Grid item>
-                                <Link href="./SignUp" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
+                            <Grid item >
+                                <Link href="./SignUp" variant="body2" > {"Don't have an account? Sign Up"} </Link>
                             </Grid>
                         </Grid>
                     </form>
                 </div>
-                <Box mt={8}>
+                <Box mt={8} >
                     <CopyRight />
                 </Box>
             </Container>

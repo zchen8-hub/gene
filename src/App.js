@@ -4,41 +4,52 @@ import './App.css';
 import { Switch, Route } from 'react-router-dom';
 import SignIn from './view/SignIn';
 import SignUp from './view/SignUp';
-import SelectProject from './view/SelectProject';
+import ProjectList from './view/ProjectList';
 
 function App() {
-  return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       123Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-    <Switch>
-      <Route path="/SignUp">
-        <SignUp />
-      </Route>
+    return (
+        // <div className="App">
+        //   <header className="App-header">
+        //     <img src={logo} className="App-logo" alt="logo" />
+        //     <p>
+        //       123Edit <code>src/App.js</code> and save to reload.
+        //     </p>
+        //     <a
+        //       className="App-link"
+        //       href="https://reactjs.org"
+        //       target="_blank"
+        //       rel="noopener noreferrer"
+        //     >
+        //       Learn React
+        //     </a>
+        //   </header>
+        // </div>
+        <
+        Switch >
+        <
+        Route path = "/SignUp" >
+        <
+        SignUp / >
+        <
+        /Route>
 
-      <Route path='/selectProject'>
-        <SelectProject /> 
-      </Route>
+        <
+        Route path = "/Project" >
+        <
+        ProjectList / >
+        <
+        /Route>
 
-      <Route path="/">
-        <SignIn />
-      </Route>
+        <
+        Route path = "/" >
+        <
+        SignIn / >
+        <
+        /Route>
 
-    </Switch>
-  );
+        <
+        /Switch>
+    );
 }
 
 export default App;
