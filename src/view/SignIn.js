@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -11,11 +12,10 @@ import Link from '@material-ui/core/Link';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom'
-import './css/SignIn.css';
 
 import CopyRight from "../components/copyright";
+import useStyles from "../components/useStyles";
 import userApi from "../api/user"
-import { Button } from '@material-ui/core';
 
 class SignIn extends Component {
     constructor(props) {
@@ -47,36 +47,40 @@ class SignIn extends Component {
         debugger;
         userApi.login(user, (response) => {
             this.setState({ userId: response.data.uid });
-            debugger;
             console.log("success");
             this.setState({ redirect: true });
         })
+        debugger;
     }
 
     render() {
+        const classes = useStyles;
         if (this.state.redirect) {
             return <Redirect to={
                 {
-                    pathname: '/Project/${this.state.userId}',
+                    pathname: `/Project/${this.state.userId}`,
                     state: {
-                        userId: this.state.userId,
                         username: this.state.username
                     }
                 }
-            } />;
+            }
+            />;
         }
 
         return (
-            <Container component="main" maxWidth="xs" >
+            <Container component="main"
+                maxWidth="xs" >
                 <CssBaseline />
-                <div className="paper" >
-                    <Avatar className="avatar" style={{ backgroundColor: 'rgb(220, 0, 78)' }}>
+                <div className={classes.paper} >
+                    <Avatar className={classes.avatar} >
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5" >
+                    <Typography component="h1"
+                        variant="h5" >
                         Sign in
                     </Typography>
-                    <form className="form" noValidate >
+                    <form className={classes.form}
+                        noValidate >
                         <TextField variant="outlined"
                             margin="normal"
                             required fullWidth id="username"
@@ -94,27 +98,26 @@ class SignIn extends Component {
                             value={this.password}
                             onChange={this.onChange}
                             autoComplete="current-password" />
-                        <FormControlLabel
-                            control={< Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
+                        <FormControlLabel control={< Checkbox value="remember"
+                            color="primary" />}
+                            label="Remember me" />
+                        <Link type="submit"
+                            fullWidth variant="contained"
                             color="primary"
-                            style={{ marginTop: '24px', marginBottom: '16px' }}
+                            className={classes.submit}
                             onClick={this.handleSignIn} >
-                            Sign In
-                        </Button>
-                        <Grid container >
+                            Sign In </Link>
+                        <Grid container>
                             <Grid item xs >
-                                <Link href="#" variant="body2" >
+                                <Link href="#"
+                                    variant="body2" >
                                     Forgot password ?
                                 </Link>
                             </Grid>
                             <Grid item >
-                                <Link href="./SignUp" variant="body2" > {"Don't have an account? Sign Up"} </Link>
+                                <Link href="./SignUp"
+                                    variant="body2" > {"Don't have an account? Sign Up"}
+                                </Link>
                             </Grid>
                         </Grid>
                     </form>

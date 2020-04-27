@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import SignIn from './view/SignIn';
 import SignUp from './view/SignUp';
 import ProjectList from './view/ProjectList';
@@ -8,22 +8,37 @@ import Project from './view/Project';
 
 function App() {
     return (
-        <Switch >
-            <Route path="/SignUp" >
-                <SignUp />
-            </Route>
-            <Route path="/ProjectList/:userId"
-                render={props => <ProjectList {...props} key={this.props.location.key}/>}>
-            </Route>
-
-            <Route path="/Project">
-                <Project />
-            </Route>
-
-            <Route path="/" >
-                <SignIn />
-            </Route>
-        </Switch>
+        // <div className="App">
+        //   <header className="App-header">
+        //     <img src={logo} className="App-logo" alt="logo" />
+        //     <p>
+        //       123Edit <code>src/App.js</code> and save to reload.
+        //     </p>
+        //     <a
+        //       className="App-link"
+        //       href="https://reactjs.org"
+        //       target="_blank"
+        //       rel="noopener noreferrer"
+        //     >
+        //       Learn React
+        //     </a>
+        //   </header>
+        // </div>
+        <Router >
+            <Switch >
+                <Route path="/SignUp"
+                    exact component={SignUp} >
+                    <SignUp />
+                </Route> <Route path="/Project/:userId"
+                    component={ProjectList} >
+                    <ProjectList />
+                </Route> 
+                <Route path="/"
+                    exact component={SignIn} >
+                    <SignIn />
+                </Route>
+            </Switch>
+        </Router>
     );
 }
 

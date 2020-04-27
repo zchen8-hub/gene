@@ -21,6 +21,7 @@ class HttpService {
         const url = URLS.api_url + path;
 
         xhr.open('GET', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send();
         this.handleResponse(xhr, callback);
 
@@ -30,7 +31,6 @@ class HttpService {
     async post(path, data, callback) {
         let xhr = new XMLHttpRequest();
         const url = URLS.api_url + path;
-        debugger;
         console.log(url);
 
         var js = JSON.stringify(data)
