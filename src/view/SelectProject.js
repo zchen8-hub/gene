@@ -20,24 +20,32 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
+import ProjectApi from '../api/project';
+
 export default function SelectProject() {
     const [state, setState] = React.useState({
         columns: [
             {
                 title: 'Name',
-                field: 'name',
+                field: 'projectName',
             },
             {
                 title: 'Creator',
-                field: 'creator',
+                field: 'creatorName',
                 editable: 'never'
             },
         ],
         data: [
-            { name: 'Mehmet', creator: 'Baran', projectId: '1' },
-            { name: 'Zerya Betül', creator: 'Baran', projectId: '2' },
+            // { name: 'Mehmet', creator: 'Baran', projectId: '1' },
+            // { name: 'Zerya Betül', creator: 'Baran', projectId: '2' },
         ],
     });
+
+    const uid = '0a1f5058-2291-4478-81ba-605a0124a3cb';
+    ProjectApi.listAllProject(uid, (response) => {
+        let newData = response.data;
+        state.data.push(newData);
+    })
 
     const useStyles = makeStyles((theme) => ({
         container: {
@@ -79,8 +87,8 @@ export default function SelectProject() {
                 }}
                 onRowClick={(
                     (event, selectedRow) => {
-                        //fetchAPI
-                        alert(selectedRow.projectId);
+                        //Forward to Project
+                        
                     })}
                 editable={{
                     onRowAdd: (newData) =>

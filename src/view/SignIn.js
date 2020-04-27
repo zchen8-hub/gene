@@ -15,38 +15,57 @@ import CopyRight from "../components/copyright";
 import useStyles from "../components/useStyles";
 import userApi from "../api/user"
 
-class SignIn extends Component{
-    constructor(props){
+class SignIn extends Component {
+    constructor(props) {
         super(props);
-        this.state ={
-            username:'',
-            password:''
+        this.state = {
+            username: '',
+            password: ''
         }
         this.onChange = this.onChange.bind(this);
         this.handleSignIn = this.handleSignIn.bind(this);
     }
 
-    onChange(event){
-        this.setState({[event.target.name]: event.target.value});
+    onChange(event) {
+        this.setState({ [event.target.name]: event.target.value });
     }
 
-    handleSignIn(){
-        const {username, password} = this.state
+    handleSignIn() {
+        const { username, password } = this.state
 
         const user = {
             username,
             password
         }
 
-        userApi.login(user,(response)=>{
-            window.open("/selectProject")
+        userApi.login(user, (response) => {
+            alert(response.data.uid);
         })
 
     }
 
     render() {
+        // const useStyles = makeStyles((theme) => ({
+        //     paper: {
+        //         marginTop: theme.spacing(8),
+        //         display: 'flex',
+        //         flexDirection: 'column',
+        //         alignItems: 'center',
+        //     },
+        //     avatar: {
+        //         margin: theme.spacing(1),
+        //         backgroundColor: theme.palette.secondary.main,
+        //     },
+        //     form: {
+        //         width: '100%', // Fix IE 11 issue.
+        //         marginTop: theme.spacing(1),
+        //     },
+        //     submit: {
+        //         margin: theme.spacing(3, 0, 2),
+        //     },
+        // }));
         const classes = useStyles;
-    
+
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -66,8 +85,8 @@ class SignIn extends Component{
                             id="username"
                             label="UserName"
                             name="username"
-                            value ={this.username}
-                            onChange = {this.onChange}
+                            value={this.username}
+                            onChange={this.onChange}
                             autoFocus
                         />
                         <TextField
@@ -79,8 +98,8 @@ class SignIn extends Component{
                             label="Password"
                             type="password"
                             id="password"
-                            value ={this.password}
-                            onChange = {this.onChange}
+                            value={this.password}
+                            onChange={this.onChange}
                             autoComplete="current-password"
                         />
                         <FormControlLabel
@@ -93,7 +112,7 @@ class SignIn extends Component{
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            onClick = {this.handleSignIn}
+                            onClick={this.handleSignIn}
                         >
                             Sign In
                         </Button>

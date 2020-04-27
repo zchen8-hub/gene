@@ -9,7 +9,8 @@ class ProjectApi {
 
     static listAllProject(uid, callback) {
         let url = 'user/${uid}/project';
-
+        let uri = url.replace("${uid}", uid);
+        console.log(uri);
         return httpService.get(url, callback);
     }
 
