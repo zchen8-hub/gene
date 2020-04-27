@@ -44,24 +44,13 @@ class SignIn extends Component {
             password
         }
 
+        debugger;
         userApi.login(user, (response) => {
-            this.setState({ userId: response.uid });
+            this.setState({ userId: response.data.uid });
+            debugger;
             console.log("success");
             this.setState({ redirect: true });
         })
-        // debugger;
-        // fetch("http://127.0.0.1:8080/api/user/login", {
-        //     method: 'POST',
-        //     body: JSON.stringify(user),
-        //     headers: new Headers({
-        //         'Content-Type': 'application/json'
-        //     })})  
-        //     .then(res => res.json())
-        //     .then(
-        //         (result) => {
-        //             console.log(result);
-        //         }
-        //     )
     }
 
     render() {
