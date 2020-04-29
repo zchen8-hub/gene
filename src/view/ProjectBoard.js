@@ -9,14 +9,13 @@ import './css/ProjectBoard.css';
 import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Transaction from './Transaction';
-import Icon from '@material-ui/core/Icon';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
 import transactionApi from '../api/transaction'
 import groupApi from '../api/group'
 import { withRouter } from "react-router-dom";
 
-class Project extends Component {
+class ProjectBoard extends Component {
 
     constructor(props) {
         super(props);
@@ -26,11 +25,10 @@ class Project extends Component {
     }
     componentDidMount(){
         const projectId = this.props.match.params.projectId;
-        debugger;
-        groupApi.listAllGroups(projectId,(response)=>{
+        // groupApi.listAllGroups(projectId,(response)=>{
 
-        })
-        transactionApi.listAllTransaction()
+        // })
+        // transactionApi.listAllTransaction()
     }
     render() {
         return (
@@ -58,7 +56,7 @@ class Project extends Component {
                             <Transaction />
                             <Transaction />
                         </CardContent>
-                        <CardActions style={{paddingLeft: '16px'}}>
+                        <CardActions style={{paddingLeft: '16px', paddingRight: '16px'}}>
                             <Button
                                 variant="contained"
                                 color="inherit"
@@ -80,23 +78,37 @@ class Project extends Component {
                             <Transaction />
                             <Transaction />
                         </CardContent>
-                        <CardActions>
-
+                        <CardActions style={{paddingLeft: '16px', paddingRight: '16px'}}>
+                            <Button
+                                variant="contained"
+                                color="inherit"
+                                startIcon={<SubdirectoryArrowRightIcon />}
+                                style={{backgroundColor: '#F4F5F7'}}
+                            >
+                                Create New Transaction
+                            </Button>
                         </CardActions>
                     </Card>
-                    <Card className="column">
-                        <CardHeader>
-
-                        </CardHeader>
-                        <CardContent>
+                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
+                        <CardContent style={{ paddingBottom: '0' }}>
+                            <Button>DONE</Button>
+                        </CardContent>
+                        <CardContent style={{ paddingTop: '0' }}>
                             <Transaction />
                             <Transaction />
                             <Transaction />
                             <Transaction />
                             <Transaction />
                         </CardContent>
-                        <CardActions>
-
+                        <CardActions style={{paddingLeft: '16px', paddingRight: '16px'}}>
+                            <Button
+                                variant="contained"
+                                color="inherit"
+                                startIcon={<SubdirectoryArrowRightIcon />}
+                                style={{backgroundColor: '#F4F5F7'}}
+                            >
+                                Create New Transaction
+                            </Button>
                         </CardActions>
                     </Card>
                 </div>
@@ -105,4 +117,4 @@ class Project extends Component {
     }
 };
 
-export default withRouter(Project);
+export default withRouter(ProjectBoard);

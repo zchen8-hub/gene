@@ -1,6 +1,10 @@
-.root {
+.transaction-root {
     min-width: 275px;
     margin-top: 16px;
+}
+
+.transaction-root :hover {
+    background-color: aqua;
 }
 
 .bullet {
