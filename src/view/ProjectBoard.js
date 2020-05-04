@@ -6,8 +6,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import './css/ProjectBoard.css';
-import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
-import Container from '@material-ui/core/Container';
+import { Card, CardContent, CardActions } from '@material-ui/core';
 import Transaction from './Transaction';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
@@ -20,14 +19,14 @@ class ProjectBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groupList : []
+            groupList: []
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
-        groupApi.listAllGroups(this.props.match.params.projectId,(response)=>{
-            this.setState({groupList: response.data});
+        groupApi.listAllGroups(this.props.match.params.projectId, (response) => {
+            this.setState({ groupList: response.data });
         })
 
         /*groupList.forEach(group => {
@@ -37,30 +36,30 @@ class ProjectBoard extends Component {
         });*/
     }
 
-    addGroup(projectId,groupname){
+    addGroup(projectId, groupname) {
         const group = {
             "groupName": groupname
         }
-        groupApi.createGroup(projectId,group,(response)=>{
+        groupApi.createGroup(projectId, group, (response) => {
             window.location.reload(true);
         })
     }
 
-    deleteGroup(projectId,groupId){
-        groupApi.deleteGroup(projectId,groupId,(response)=>{
+    deleteGroup(projectId, groupId) {
+        groupApi.deleteGroup(projectId, groupId, (response) => {
             window.location.reload(true);
             console.log("success");
         })
     }
 
-    addTransaction(groupId,transaction){
-        transactionApi.createTransaction(groupId,transaction,(response)=>{
+    addTransaction(groupId, transaction) {
+        transactionApi.createTransaction(groupId, transaction, (response) => {
             window.location.reload(true);
         })
     }
 
-    deleteTransaction(groupId,transaction){
-        transactionApi.deleteTransaction(groupId,transaction,(response)=>{
+    deleteTransaction(groupId, transaction) {
+        transactionApi.deleteTransaction(groupId, transaction, (response) => {
             window.location.reload(true);
         })
     }
@@ -91,12 +90,12 @@ class ProjectBoard extends Component {
                             <Transaction />
                             <Transaction />
                         </CardContent>
-                        <CardActions style={{paddingLeft: '16px', paddingRight: '16px'}}>
+                        <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }}>
                             <Button
                                 variant="contained"
                                 color="inherit"
                                 startIcon={<SubdirectoryArrowRightIcon />}
-                                style={{backgroundColor: '#F4F5F7'}}
+                                style={{ backgroundColor: '#F4F5F7' }}
                             >
                                 Create New Transaction
                             </Button>
@@ -107,18 +106,18 @@ class ProjectBoard extends Component {
                             <Button>IN PROGRESS</Button>
                         </CardContent>
                         <CardContent style={{ paddingTop: '0' }}>
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
+                            <Transaction title="123" />
+                            <Transaction title="123" />
+                            <Transaction title="123" />
+                            <Transaction title="123" />
+                            <Transaction title="123" />
                         </CardContent>
-                        <CardActions style={{paddingLeft: '16px', paddingRight: '16px'}}>
+                        <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }}>
                             <Button
                                 variant="contained"
                                 color="inherit"
                                 startIcon={<SubdirectoryArrowRightIcon />}
-                                style={{backgroundColor: '#F4F5F7'}}
+                                style={{ backgroundColor: '#F4F5F7' }}
                             >
                                 Create New Transaction
                             </Button>
@@ -135,12 +134,12 @@ class ProjectBoard extends Component {
                             <Transaction />
                             <Transaction />
                         </CardContent>
-                        <CardActions style={{paddingLeft: '16px', paddingRight: '16px'}}>
+                        <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }}>
                             <Button
                                 variant="contained"
                                 color="inherit"
                                 startIcon={<SubdirectoryArrowRightIcon />}
-                                style={{backgroundColor: '#F4F5F7'}}
+                                style={{ backgroundColor: '#F4F5F7' }}
                             >
                                 Create New Transaction
                             </Button>
