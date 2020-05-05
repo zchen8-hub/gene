@@ -19,7 +19,8 @@ class ProjectBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groupList: []
+            groupList: [],
+            tagList: []
         }
     }
 
@@ -27,6 +28,7 @@ class ProjectBoard extends Component {
 
         groupApi.listAllGroups(this.props.match.params.projectId, (response) => {
             this.setState({ groupList: response.data });
+            console.log(this.state.groupList);
         })
 
         /*groupList.forEach(group => {
@@ -66,85 +68,44 @@ class ProjectBoard extends Component {
 
     render() {
         return (
-            <div className="root">
-                <AppBar position="static">
-                    <Toolbar>
-                        <IconButton edge="start" className="menuButton" color="inherit" aria-label="menu">
+            <div className="root" >
+                <AppBar position="static" >
+                    <Toolbar >
+                        <IconButton edge="start"
+                            className="menuButton"
+                            color="inherit"
+                            aria-label="menu" >
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="h6" className="title">
-                            {this.props.location.state.projectName}
+                        <Typography variant="h6"
+                            className="title" > {this.props.location.state.projectName}
                         </Typography>
-                        <Button color="inherit">Logout</Button>
+                        <Button color="inherit" > Logout </Button>
                     </Toolbar>
                 </AppBar>
-                <div className="container" style={{ display: 'flex' }}>
-                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
-                        <CardContent style={{ paddingBottom: '0' }}>
-                            <Button>TO DO</Button>
-                        </CardContent>
-                        <CardContent style={{ paddingTop: '0' }}>
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                        </CardContent>
-                        <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-                            <Button
-                                variant="contained"
-                                color="inherit"
-                                startIcon={<SubdirectoryArrowRightIcon />}
-                                style={{ backgroundColor: '#F4F5F7' }}
-                            >
-                                Create New Transaction
-                            </Button>
-                        </CardActions>
-                    </Card>
-                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
-                        <CardContent style={{ paddingBottom: '0' }}>
-                            <Button>IN PROGRESS</Button>
-                        </CardContent>
-                        <CardContent style={{ paddingTop: '0' }}>
-                            <Transaction title="123" />
-                            <Transaction title="123" />
-                            <Transaction title="123" />
-                            <Transaction title="123" />
-                            <Transaction title="123" />
-                        </CardContent>
-                        <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-                            <Button
-                                variant="contained"
-                                color="inherit"
-                                startIcon={<SubdirectoryArrowRightIcon />}
-                                style={{ backgroundColor: '#F4F5F7' }}
-                            >
-                                Create New Transaction
-                            </Button>
-                        </CardActions>
-                    </Card>
-                    <Card className="column" style={{ backgroundColor: '#F4F5F7' }}>
-                        <CardContent style={{ paddingBottom: '0' }}>
-                            <Button>DONE</Button>
-                        </CardContent>
-                        <CardContent style={{ paddingTop: '0' }}>
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                            <Transaction />
-                        </CardContent>
-                        <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-                            <Button
-                                variant="contained"
-                                color="inherit"
-                                startIcon={<SubdirectoryArrowRightIcon />}
-                                style={{ backgroundColor: '#F4F5F7' }}
-                            >
-                                Create New Transaction
-                            </Button>
-                        </CardActions>
-                    </Card>
+                <div className="container" style={{ display: 'flex' }} >
+                    {this.state.groupList.map((group) =>
+                        <Card className="column" style={{ backgroundColor: "#F4F5F7" }} >
+                            <CardContent style={{ paddingBottom: '0' }}>
+                                <Button > {group.groupName} </Button>
+                            </CardContent>
+                            <CardContent style={{ paddingTop: '0' }} >
+                                < Transaction />
+                                <Transaction />
+                                <Transaction />
+                                <Transaction />
+                                <Transaction />
+                            </CardContent>
+                            <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }} >
+                                <Button variant="contained"
+                                    color="inherit"
+                                    startIcon={<SubdirectoryArrowRightIcon />}
+                                    style={{ backgroundColor: '#F4F5F7' }} >
+                                    Create New Transaction
+                                </Button>
+                            </CardActions>
+                        </Card>)
+                    }
                 </div>
             </div>
         )
