@@ -48,20 +48,19 @@ class SignUp extends Component {
     }
     
     render() {
-        const classes = useStyles;
         let {firstName, lastName, email, phone, password} = this.state;
 
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
+                <div style={{marginTop: '64px', display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
+                    <Avatar style={{margin: '8px', backgroundColor: 'rgb(220, 0, 78)',}}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form style={{width: '100%', marginTop: '8px',}} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -137,12 +136,13 @@ class SignUp extends Component {
                             </Grid>
                         </Grid>
                         <Button
-                            type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
-                            href="#"
+                            style={{
+                                marginTop: '24px',
+                                marginBottom: '16px'
+                            }}
                             onClick={this.handleSignUp}
                         >
                             Sign Up

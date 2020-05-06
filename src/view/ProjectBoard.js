@@ -5,10 +5,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
 import './css/ProjectBoard.css';
-import { Card, CardContent, CardActions } from '@material-ui/core';
+import { Card, CardContent, CardActions, Grid } from '@material-ui/core';
 import Transaction from './Transaction';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
 import transactionApi from '../api/transaction'
 import groupApi from '../api/group'
@@ -19,17 +19,21 @@ class ProjectBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userId: props.location.state.userId,
             groupList: [],
             tagList: []
         }
     }
 
     componentDidMount() {
+        //console.log("user id: " + this.state.userId);
 
         groupApi.listAllGroups(this.props.match.params.projectId, (response) => {
-            this.setState({ groupList: response.data });
+            this.setState({ groupList: response.data.reverse() });
             console.log(this.state.groupList);
+            //console.log("List Groups Response: " + response.data);
         })
+
 
         /*groupList.forEach(group => {
             transactionApi.listAllTransaction(group.groupId,(response)=>{
@@ -54,19 +58,37 @@ class ProjectBoard extends Component {
         })
     }
 
-    addTransaction(groupId, transaction) {
-        transactionApi.createTransaction(groupId, transaction, (response) => {
-            window.location.reload(true);
-        })
+    addTransaction(groupId, creatorId) {
+        transactionApi.createTransaction(
+            groupId,
+            {
+                title: "new transaction",
+                description: "",
+                creatorId: creatorId
+            },
+            (response) => {
+                //console.log(response);
+                if (response.code === "200") {
+                    let newGroupList = this.state.groupList;
+                    //console.log(newGroupList);
+                    newGroupList.find(group => group.groupId === groupId).transactions.push(response.data);
+                    //console.log(newGroupList);
+                    this.setState({ groupList: newGroupList });
+                } else {
+                    alert("Failed: " + response.message);
+                }
+            })
     }
 
-    deleteTransaction(groupId, transaction) {
-        transactionApi.deleteTransaction(groupId, transaction, (response) => {
+    deleteTransaction(groupId, transactionId) {
+        transactionApi.deleteTransaction(groupId, transactionId, (response) => {
             window.location.reload(true);
         })
     }
 
     render() {
+        let onAddingGroup = false;
+
         return (
             <div className="root" >
                 <AppBar position="static" >
@@ -83,30 +105,44 @@ class ProjectBoard extends Component {
                         <Button color="inherit" > Logout </Button>
                     </Toolbar>
                 </AppBar>
-                <div className="container" style={{ display: 'flex' }} >
-                    {this.state.groupList.map((group) =>
-                        <Card className="column" style={{ backgroundColor: "#F4F5F7" }} >
-                            <CardContent style={{ paddingBottom: '0' }}>
-                                <Button > {group.groupName} </Button>
-                            </CardContent>
-                            <CardContent style={{ paddingTop: '0' }} >
-                                < Transaction />
-                                <Transaction />
-                                <Transaction />
-                                <Transaction />
-                                <Transaction />
-                            </CardContent>
-                            <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }} >
-                                <Button variant="contained"
-                                    color="inherit"
-                                    startIcon={<SubdirectoryArrowRightIcon />}
-                                    style={{ backgroundColor: '#F4F5F7' }} >
-                                    Create New Transaction
+                <Grid container spacing={3} style={{padding: '24px'}}>
+                    {this.state.groupList.map((group, index) =>
+                        <Grid item style={{width: '400px'}}>
+                            <Card key={group.groupId} style={{ backgroundColor: "#F4F5F7" }} >
+                                <CardContent style={{ paddingBottom: '0'}}>
+                                    <Button > {group.groupName} </Button>
+                                </CardContent>
+                                <CardContent style={{ paddingTop: '0' }} >
+                                    {
+                                        group.transactions != null ?
+                                            group.transactions.map((transaction, index) =>
+                                                <Transaction key={transaction.transactionId} transaction={transaction} actionDelete={this.deleteTransaction} />
+                                            )
+                                            :
+                                            <div>{console.log(group)}</div>
+                                    }
+                                </CardContent>
+                                <CardActions style={{ paddingLeft: '16px', paddingRight: '16px' }} >
+                                    <Button
+                                        startIcon={<AddIcon fontSize="large" />}
+                                        disableElevation={true}
+                                        onClick={() => this.addTransaction(group.groupId, this.state.userId)}
+                                    >
+                                        Create New Transaction
                                 </Button>
-                            </CardActions>
-                        </Card>)
-                    }
-                </div>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    )}
+                    <Grid item >
+                        {
+                            onAddingGroup ? 
+                                123
+                                :
+                                <Button style={{ backgroundColor: "#F4F5F7" }}><AddIcon fontSize="large" /></Button>
+                        }
+                    </Grid>
+                </Grid>
             </div>
         )
     }

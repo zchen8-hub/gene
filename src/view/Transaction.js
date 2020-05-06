@@ -56,54 +56,67 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const CommentExample = () => (
-    <Comment.Group>
-        <Header as='h3' dividing>
-            Comments
-        </Header>
 
-        <Comment>
-            <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
-            <Comment.Content>
-                <Comment.Author>Tom Lukic</Comment.Author>
-                <Comment.Text>
-                    This will be great for business reports. I will definitely download
-                    this.
-                </Comment.Text>
-            </Comment.Content>
-        </Comment>
-
-        <Form reply>
-            <Form.TextArea />
-            <Button content='Add Reply' labelPosition='left' icon='edit' primary />
-        </Form>
-    </Comment.Group>
-)
 
 export default function Transaction(props) {
-    const [title, setTitle] = React.useState(props.title);
-    const [description, setDescription] = React.useState("default description");
+    const [title, setTitle] = React.useState(props.transaction.title);
+    const [description, setDescription] = React.useState(props.transaction.description);
     var tags = [];
     var comments = [];
-    var member = ["George", "Emily", "Amy"];
+    var members = ["George Yang", "Andrew Lin", "Ben Nyan"];
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
     const actionDelete = () => {
-
+        props.actionDelete(props.transaction.groupId, props.transaction.transactionId);
     }
 
+    const CommentExample = () => (
+        <Comment.Group>
+            <Header as='h3' dividing>
+                Comments
+            </Header>
+    
+            <Comment>
+                <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
+                <Comment.Content>
+                    <Comment.Author>Tom Lukic</Comment.Author>
+                    <Comment.Text>
+                        This will be great for business reports. I will definitely download
+                        this.
+                    </Comment.Text>
+                </Comment.Content>
+            </Comment>
+    
+            <Comment>
+                <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/stevie.jpg' />
+                <Comment.Content>
+                    <Comment.Author>Stevie Feliciano</Comment.Author>
+                    <Comment.Text>
+                        Hey guys, I hope this example comment is helping you read this
+                        documentation.
+                    </Comment.Text>
+                </Comment.Content>
+            </Comment>
+    
+            <Form reply>
+                <Form.TextArea />
+                <Button content='Add Reply' labelPosition='left' icon='edit' primary />
+            </Form>
+        </Comment.Group>
+    )
+
     function GenerateListItem() {
-        return member.map((value) =>
-            <ListItem key={value}>
+        return members.map((member) =>
+            <ListItem key={member}>
                 <ListItemAvatar>
                     <Avatar>
-                        <FolderIcon />
+                        {member.toUpperCase().slice(0, 2)}
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={value}
+                    primary={member}
                     secondary="Secondary text"
                 />
                 <ListItemSecondaryAction>

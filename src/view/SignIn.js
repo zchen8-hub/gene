@@ -37,6 +37,7 @@ class SignIn extends Component {
     }
 
     handleSignIn() {
+        debugger;
         const { username, password } = this.state
 
         const user = {
@@ -54,7 +55,6 @@ class SignIn extends Component {
     }
 
     render() {
-        const classes = useStyles;
         if (this.state.redirect) {
             return <Redirect to={
                 {
@@ -68,19 +68,16 @@ class SignIn extends Component {
         }
 
         return (
-            <Container component="main"
-                maxWidth="xs" >
+            <Container component="main" maxWidth="xs" >
                 <CssBaseline />
-                <div className={classes.paper} >
-                    <Avatar className={classes.avatar} >
+                <div style={{ marginTop: '64px', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                    <Avatar style={{ margin: '8px', backgroundColor: 'rgb(220, 0, 78)', }}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1"
-                        variant="h5" >
+                    <Typography component="h1" variant="h5" >
                         Sign in
                     </Typography>
-                    <form className={classes.form}
-                        noValidate >
+                    <form style={{ width: '100%', marginTop: '8px', }} noValidate >
                         <TextField variant="outlined"
                             margin="normal"
                             required fullWidth id="username"
@@ -98,25 +95,29 @@ class SignIn extends Component {
                             value={this.password}
                             onChange={this.onChange}
                             autoComplete="current-password" />
-                        <FormControlLabel control={< Checkbox value="remember"
-                            color="primary" />}
+                        <FormControlLabel
+                            control={<Checkbox value="remember" color="primary" />}
                             label="Remember me" />
-                        <Link type="submit"
+                        <Button 
                             fullWidth variant="contained"
                             color="primary"
-                            className={classes.submit}
+                            style={{
+                                marginTop: '24px',
+                                marginBottom: '16px'
+                            }}
                             onClick={this.handleSignIn} >
-                            Sign In </Link>
+                            Sign In
+                        </Button>
                         <Grid container>
                             <Grid item xs >
                                 <Link href="#"
                                     variant="body2" >
-                                    Forgot password ?
+
                                 </Link>
                             </Grid>
                             <Grid item >
-                                <Link href="./SignUp"
-                                    variant="body2" > {"Don't have an account? Sign Up"}
+                                <Link href="./SignUp" variant="body2" >
+                                    {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
                         </Grid>

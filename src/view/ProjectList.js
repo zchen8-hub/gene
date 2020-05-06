@@ -29,17 +29,16 @@ class ProjectList extends Component {
             projects: [],
             isLoading: true,
             redirect: false,
-            projectId:'',
-            projectName:'',
-            groupList: []
+            projectId: '',
+            projectName: '',
+            groupList: [],
+            userId: this.props.match.params.userId,
         }
-
     }
 
     componentDidMount() {
-        debugger;
-        const userId = this.props.match.params.userId;
-        projectApi.listAllProject(userId, (response) => {
+        // const userId = this.props.match.params.userId;
+        projectApi.listAllProject(this.state.userId, (response) => {
             this.setState(
                 {
                     projects: response.data,
@@ -64,15 +63,8 @@ class ProjectList extends Component {
         })
 
     }
-    useStyles = makeStyles((theme) => ({
-        container: {
-            marginTop: theme.spacing(9)
-        },
-    }));
 
     render() {
-        const classes = this.useStyles
-
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
             Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -121,18 +113,19 @@ class ProjectList extends Component {
             });
         }
 
-        if(this.state.redirect){
-            return <Redirect to= {{
+        if (this.state.redirect) {
+            return <Redirect to={{
                 pathname: `/ProjectBoard/${this.state.projectId}`,
-                state: { 
+                state: {
                     groupList: this.state.groupList,
-                    projectName: this.state.projectName
-                  }
-            }} />; 
+                    projectName: this.state.projectName,
+                    userId: this.state.userId,
+                }
+            }} />;
         }
 
         return (
-            <Container maxWidth="sm" className={classes.container}>
+            <Container maxWidth="sm" style={{ marginTop: '72px' }}>
                 {
                     isLoading ?
                         <div className="row">Loading...</div>
@@ -148,11 +141,10 @@ class ProjectList extends Component {
                             onRowClick={(
                                 (event, selectedRow) => {
                                     //fetchAPI
-                                    debugger;
                                     this.setState({
                                         redirect: true,
-                                        projectId : selectedRow.projectId,
-                                        groupList:  selectedRow.groupList,
+                                        projectId: selectedRow.projectId,
+                                        groupList: selectedRow.groupList,
                                         projectName: selectedRow.name
 
                                     })

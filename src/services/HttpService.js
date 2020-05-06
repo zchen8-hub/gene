@@ -1,17 +1,18 @@
 import URLS from '../constants/urls';
 
 class HttpService {
-    handleResponse(xhr, callbackSuccess, callbackError = null) {
+    handleResponse(xhr, callbackSuccess) {
         xhr.onloadend = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.response);
                     callbackSuccess(response);
-                } else if (xhr.status === 400) {
-                    alert("unable to process request");
                 } else {
-                    callbackError();
-                }
+                    alert("unable to process request: " + xhr.status);
+                } 
+                // else {
+                //     callbackError();
+                // }
             }
         }
     }
@@ -19,10 +20,11 @@ class HttpService {
     async get(path, callback) {
         let xhr = new XMLHttpRequest();
         const url = URLS.api_url + path;
+        console.log("GET url: " + url)
 
         xhr.open('GET', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        console.log(url)
+        
         xhr.send();
         this.handleResponse(xhr, callback);
 
@@ -32,7 +34,7 @@ class HttpService {
     async post(path, data, callback) {
         let xhr = new XMLHttpRequest();
         const url = URLS.api_url + path;
-        console.log(url);
+        console.log("POST url: " + url);
 
         var js = JSON.stringify(data)
         console.log(js);
@@ -49,6 +51,7 @@ class HttpService {
     async put(path, data, callback) {
         let xhr = new XMLHttpRequest();
         const url = URLS.api_url + path;
+        console.log("PUT url: " + url)
 
         var js = JSON.stringify(data)
 
@@ -63,6 +66,7 @@ class HttpService {
     async delete(path, callback) {
         let xhr = new XMLHttpRequest();
         const url = URLS.api_url + path;
+        console.log("DELETE url: " + url)
 
         xhr.open('DELETE', url, true);
         xhr.send();
