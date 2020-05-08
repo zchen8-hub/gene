@@ -33,7 +33,7 @@ class ProjectBoard extends Component {
 
     componentDidMount() {
         //console.log("onChangingGroupTitle: " + this.state.onChangingGroupTitle);
-        //console.log("user id: " + this.state.userId);
+        console.log("user id: " + this.state.userId);
 
         groupApi.listAllGroups(this.state.projectId, (response) => {
             this.setState({ groupList: response.data.reverse() });
@@ -64,12 +64,8 @@ class ProjectBoard extends Component {
             if (response.code === "200") {
                 console.log("success");
                 let newGroupList = this.state.groupList.filter((group) => group.groupId != groupId);
-                //newGroupList.find(group => group.groupId === groupId).transactions.push(response.data);
                 this.setState({ groupList: newGroupList });
-
             }
-            //window.location.reload(true);
-
         })
     }
 
@@ -99,7 +95,7 @@ class ProjectBoard extends Component {
             transaction,
             (response) => {
                 if (response.code === "200") {
-
+                    //window.location.reload(true);
                 }
             })
     }
@@ -199,6 +195,7 @@ class ProjectBoard extends Component {
                                             group.transactions.map((transaction, index) =>
                                                 <Transaction
                                                     key={transaction.transactionId}
+                                                    userId={this.state.userId}
                                                     transaction={transaction}
                                                     actionDelete={this.deleteTransaction}
                                                     actionUpdate={this.updateTransaction} />

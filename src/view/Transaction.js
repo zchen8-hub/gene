@@ -5,14 +5,21 @@ import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Button, Comment, Form, Header } from 'semantic-ui-react'
 import { List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
 import { Avatar, Grid, Typography } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 import FolderIcon from '@material-ui/icons/Folder';
+import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PersonIcon from '@material-ui/icons/Person';
 
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
 
 const useStyles = makeStyles((theme) => ({
+    avatar: {
+        backgroundColor: blue[100],
+        color: blue[600],
+    },
     modal: {
         display: 'flex',
         alignItems: 'center',
@@ -45,12 +52,6 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 'auto',
         maxWidth: '70%',
     },
-    left: {
-        flex: '70%',
-    },
-    right: {
-        flex: '30%',
-    },
     IconButton: {
         verticalAlign: 'top'
     }
@@ -63,13 +64,49 @@ export default function Transaction(props) {
     const [description, setDescription] = React.useState(props.transaction.description);
     var tags = [];
     var comments = [];
-    var members = ["George Yang", "Andrew Lin", "Ben Nyan"];
+    // var [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
+    var [members, setMembers] = React.useState([
+        {
+            email: "george5h87a@gmail.com",
+            password: "123123",
+            phone: "1234567891",
+            uid: "1",
+            username: "George"
+        },
+        {
+            email: "george5h87a@gmail.com",
+            password: "123123",
+            phone: "1234567891",
+            uid: "2",
+            username: "Mike"
+        },
+        {
+            email: "george5h87a@gmail.com",
+            password: "123123",
+            phone: "1234567891",
+            uid: "3",
+            username: "Emily"
+        },
+    ])
+    const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
-    const actionDelete = () => {
+    const handleDeleteTransaction = () => {
         props.actionDelete(props.transaction.groupId, props.transaction.transactionId);
+    }
+
+    const handleCloseDialog = () => {
+        props.actionUpdate(
+            props.transaction.groupId,
+            props.transaction.transactionId,
+            {
+                title: title,
+                description: description
+            }
+        );
+        setOpen(false);
     }
 
     const CommentExample = () => (
@@ -77,7 +114,7 @@ export default function Transaction(props) {
             <Header as='h3' dividing>
                 Comments
             </Header>
-    
+
             <Comment>
                 <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
                 <Comment.Content>
@@ -88,7 +125,7 @@ export default function Transaction(props) {
                     </Comment.Text>
                 </Comment.Content>
             </Comment>
-    
+
             <Comment>
                 <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/stevie.jpg' />
                 <Comment.Content>
@@ -99,7 +136,7 @@ export default function Transaction(props) {
                     </Comment.Text>
                 </Comment.Content>
             </Comment>
-    
+
             <Form reply>
                 <Form.TextArea />
                 <Button content='Add Reply' labelPosition='left' icon='edit' primary />
@@ -108,23 +145,27 @@ export default function Transaction(props) {
     )
 
     function GenerateListItem() {
+        console.log(props.userId);
+        console.log(props.transaction.creatorId);
         return members.map((member) =>
-            <ListItem key={member}>
+            <ListItem button key={member.uid}>
                 <ListItemAvatar>
-                    <Avatar>
-                        {member.toUpperCase().slice(0, 2)}
+                    <Avatar className={classes.avatar}>
+                        <PersonIcon />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                    primary={member}
-                    secondary="Secondary text"
-                />
+                <ListItemText primary={member.username} />
                 <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon />
-                    </IconButton>
+                    {
+                        props.userId === props.transaction.creatorId ?
+                            <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon />
+                            </IconButton>
+                            :
+                            null
+                    }
                 </ListItemSecondaryAction>
-            </ListItem >
+            </ListItem>
         );
     }
 
@@ -143,7 +184,7 @@ export default function Transaction(props) {
             <div>
                 <Dialog
                     open={open}
-                    onClose={() => setOpen(false)}
+                    onClose={handleCloseDialog}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                     maxWidth="md"
@@ -155,40 +196,79 @@ export default function Transaction(props) {
                             placeholder="Title"
                             value={title}
                             onChange={(event) => setTitle(event.target.value)}
+                            onBlur={(event) => props.transaction.title = event.target.value}
                         />
-                        <IconButton aria-label="delete" className={classes.IconButton} onClick={actionDelete}>
+                        <IconButton aria-label="delete" className={classes.IconButton} onClick={handleDeleteTransaction}>
                             <DeleteIcon />
                         </IconButton>
-                        <IconButton aria-label="close" className={classes.IconButton} onClick={() => setOpen(false)}>
+                        <IconButton aria-label="close" className={classes.IconButton} onClick={handleCloseDialog}>
                             <CloseIcon />
                         </IconButton>
                     </DialogTitle>
                     <DialogContent style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <div className={classes.left}>
-                            <TextField
-                                id="outlined-multiline-flexible"
-                                label="Description"
-                                multiline
-                                autoFocus={true}
-                                rowsMax={10}
-                                value={description}
-                                onChange={(event) => setDescription(event.target.value)}
-                                variant="outlined"
-                                fullWidth={true}
-                                size="medium"
-                            />
-                            <CommentExample />
-                        </div>
-                        <div className={classes.right}>
-                            <Typography variant="h6" style={{ paddingLeft: '16px' }}>
-                                Member
-                            </Typography>
-                            <div className={classes.demo}>
-                                <List>
-                                    <GenerateListItem />
-                                </List>
-                            </div>
-                        </div>
+                        <Grid container>
+                            <Grid item container direction="column" xs={8}>
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    placeholder="need some descriptions"
+                                    multiline
+                                    rowsMax={10}
+                                    value={description}
+                                    onChange={(event) => setDescription(event.target.value)}
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    size="medium"
+                                    onBlur={(event) => props.transaction.description = event.target.value}
+                                />
+                                {/* <Grid item style={{ marginTop: '8px' }}>
+                                    <Button variant="contained" color="blue" style={{ marginRight: '8px' }}>
+                                        Save
+                                    </Button>
+                                    <Button style={{backgroundColor: 'inherit'}}>Cancel</Button>
+                                </Grid> */}
+                                <CommentExample />
+                            </Grid>
+                            <Grid item xs={4} container direction="column">
+                                <Grid item>
+                                    <Typography variant="h6" style={{ paddingLeft: '16px' }}>
+                                        Creator
+                                    </Typography>
+                                    <div className={classes.demo}>
+                                        <List>
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                    <Avatar>
+                                                        {creator.username.toUpperCase().slice(0, 2)}
+                                                    </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={creator.username}
+                                                />
+                                                <ListItemSecondaryAction></ListItemSecondaryAction>
+                                            </ListItem >
+                                        </List>
+                                    </div>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="h6" style={{ paddingLeft: '16px' }}>
+                                        Member
+                                    </Typography>
+                                    <div className={classes.demo}>
+                                        <List dense={true}>
+                                            <GenerateListItem />
+                                            <ListItem autoFocus button>
+                                                <ListItemAvatar>
+                                                    <Avatar>
+                                                        <AddIcon />
+                                                    </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText primary="Add member" />
+                                            </ListItem>
+                                        </List>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </DialogContent>
                 </Dialog>
             </div>
