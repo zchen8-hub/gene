@@ -133,7 +133,7 @@ export default function Transaction(props) {
             <Card className="transaction-root">
                 <CardActionArea onClick={() => setOpen(true)}>
                     <CardContent>
-                        <Typography variant="h5" component="h2" className={classes.title}>
+                        <Typography variant="h6" component="h2" className={classes.title}>
                             {title}
                         </Typography>
                     </CardContent>
@@ -169,6 +169,7 @@ export default function Transaction(props) {
                                 id="outlined-multiline-flexible"
                                 label="Description"
                                 multiline
+                                autoFocus={true}
                                 rowsMax={10}
                                 value={description}
                                 onChange={(event) => setDescription(event.target.value)}

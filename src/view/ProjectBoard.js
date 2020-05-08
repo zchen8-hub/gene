@@ -6,8 +6,9 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import './css/ProjectBoard.css';
-import { Card, CardContent, CardActions, Grid } from '@material-ui/core';
+import { Card, CardContent, CardActions, Grid, TextField } from '@material-ui/core';
 import Transaction from './Transaction';
 
 import transactionApi from '../api/transaction'
@@ -19,16 +20,22 @@ class ProjectBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            projectId: this.props.match.params.projectId,
             userId: props.location.state.userId,
             groupList: [],
-            tagList: []
+            tagList: [],
+            onAddingGroup: false,
+            onFocusingTitleId: "",
+            onFocusingTitleValue: "",
+            groupTitleBtn: null,
         }
     }
 
     componentDidMount() {
+        //console.log("onChangingGroupTitle: " + this.state.onChangingGroupTitle);
         //console.log("user id: " + this.state.userId);
 
-        groupApi.listAllGroups(this.props.match.params.projectId, (response) => {
+        groupApi.listAllGroups(this.state.projectId, (response) => {
             this.setState({ groupList: response.data.reverse() });
             console.log(this.state.groupList);
             //console.log("List Groups Response: " + response.data);
@@ -42,19 +49,27 @@ class ProjectBoard extends Component {
         });*/
     }
 
-    addGroup(projectId, groupname) {
+    addGroup(groupname) {
         const group = {
             "groupName": groupname
         }
-        groupApi.createGroup(projectId, group, (response) => {
+        groupApi.createGroup(this.state.projectId, group, (response) => {
             window.location.reload(true);
+            this.setState({ onAddingGroup: false });
         })
     }
 
-    deleteGroup(projectId, groupId) {
-        groupApi.deleteGroup(projectId, groupId, (response) => {
-            window.location.reload(true);
-            console.log("success");
+    deleteGroup(groupId) {
+        groupApi.deleteGroup(this.state.projectId, groupId, (response) => {
+            if (response.code === "200") {
+                console.log("success");
+                let newGroupList = this.state.groupList.filter((group) => group.groupId != groupId);
+                //newGroupList.find(group => group.groupId === groupId).transactions.push(response.data);
+                this.setState({ groupList: newGroupList });
+
+            }
+            //window.location.reload(true);
+
         })
     }
 
@@ -67,15 +82,24 @@ class ProjectBoard extends Component {
                 creatorId: creatorId
             },
             (response) => {
-                //console.log(response);
                 if (response.code === "200") {
                     let newGroupList = this.state.groupList;
-                    //console.log(newGroupList);
                     newGroupList.find(group => group.groupId === groupId).transactions.push(response.data);
-                    //console.log(newGroupList);
                     this.setState({ groupList: newGroupList });
                 } else {
                     alert("Failed: " + response.message);
+                }
+            })
+    }
+
+    updateTransaction(groupId, transactionId, transaction) {
+        transactionApi.updateTransaction(
+            groupId,
+            transactionId,
+            transaction,
+            (response) => {
+                if (response.code === "200") {
+
                 }
             })
     }
@@ -86,12 +110,50 @@ class ProjectBoard extends Component {
         })
     }
 
-    render() {
-        let onAddingGroup = false;
+    handleGroupTitleFocused(event, groupId, groupName) {
+        this.setState(
+            {
+                groupTitleBtn: event.currentTarget,
+                onFocusingTitleId: groupId,
+                onFocusingTitleValue: groupName
+            });
+        event.currentTarget.style.display = "none";
+    }
 
+    handleGroupTitleBlur() {
+        console.log(this.state.onFocusingTitleValue);
+        groupApi.updateGroupName(
+            this.state.projectId,
+            this.state.onFocusingTitleId,
+            {
+                groupName: this.state.onFocusingTitleValue
+            },
+            (response) => {
+                if (response.code === "200") {
+                    let newGroupList = this.state.groupList;
+                    newGroupList
+                        .find(group => group.groupId === response.data.groupId)
+                        .groupName = response.data.groupName;
+                    console.log(newGroupList);
+                    this.setState({
+                        groupList: newGroupList
+                    })
+                }
+                let btn = this.state.groupTitleBtn;
+                btn.style.display = "inline-flex";
+                this.setState({
+                    onFocusingTitleId: -1,
+                    onFocusingTitleValue: "",
+                    groupTitleBtn: null
+                });
+            }
+        )
+    }
+
+    render() {
         return (
             <div className="root" >
-                <AppBar position="static" >
+                <AppBar position="static">
                     <Toolbar >
                         <IconButton edge="start"
                             className="menuButton"
@@ -105,18 +167,41 @@ class ProjectBoard extends Component {
                         <Button color="inherit" > Logout </Button>
                     </Toolbar>
                 </AppBar>
-                <Grid container spacing={3} style={{padding: '24px'}}>
+                <Grid container spacing={3} wrap="nowrap" style={{ padding: '24px' }}>
                     {this.state.groupList.map((group, index) =>
-                        <Grid item style={{width: '400px'}}>
-                            <Card key={group.groupId} style={{ backgroundColor: "#F4F5F7" }} >
-                                <CardContent style={{ paddingBottom: '0'}}>
-                                    <Button > {group.groupName} </Button>
+                        <Grid item key={group.groupId} style={{ minWidth: '350px' }}>
+                            <Card style={{ backgroundColor: "#F4F5F7" }} >
+                                <CardContent style={{ paddingBottom: '0', display: 'flex', justify: 'center' }}>
+                                    <Button
+                                        style={{ padding: '0px', height: '30px' }}
+                                        onClick={(e) => this.handleGroupTitleFocused(e, group.groupId, group.groupName)}>
+                                        {group.groupName}
+                                    </Button>
+                                    <TextField
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        size="small"
+                                        autoFocus={true}
+                                        value={this.state.onFocusingTitleValue}
+                                        style={group.groupId === this.state.onFocusingTitleId ? { display: 'inline-flex' } : { display: 'none' }}
+                                        onChange={(event) => this.setState({ onFocusingTitleValue: event.target.value })}
+                                        onBlur={() => this.handleGroupTitleBlur()} />
+                                    <IconButton
+                                        aria-label="delete"
+                                        style={{ marginLeft: 'auto', paddingTop: '0px' }}
+                                        onClick={() => this.deleteGroup(group.groupId)}>
+                                        <DeleteIcon />
+                                    </IconButton>
                                 </CardContent>
-                                <CardContent style={{ paddingTop: '0' }} >
+                                <CardContent style={{ paddingTop: '0px', paddingBottom: '8px' }} >
                                     {
                                         group.transactions != null ?
                                             group.transactions.map((transaction, index) =>
-                                                <Transaction key={transaction.transactionId} transaction={transaction} actionDelete={this.deleteTransaction} />
+                                                <Transaction
+                                                    key={transaction.transactionId}
+                                                    transaction={transaction}
+                                                    actionDelete={this.deleteTransaction}
+                                                    actionUpdate={this.updateTransaction} />
                                             )
                                             :
                                             <div>{console.log(group)}</div>
@@ -136,10 +221,10 @@ class ProjectBoard extends Component {
                     )}
                     <Grid item >
                         {
-                            onAddingGroup ? 
-                                123
+                            this.state.onAddingGroup ?
+                                this.addGroup("new group")
                                 :
-                                <Button style={{ backgroundColor: "#F4F5F7" }}><AddIcon fontSize="large" /></Button>
+                                <Button onClick={() => { this.setState({ onAddingGroup: true }) }} style={{ backgroundColor: "#F4F5F7" }}><AddIcon fontSize="large" /></Button>
                         }
                     </Grid>
                 </Grid>
