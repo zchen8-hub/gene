@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -7,13 +8,16 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import './css/ProjectBoard.css';
 import { Card, CardContent, CardActions, Grid, TextField } from '@material-ui/core';
-import Transaction from './Transaction';
+import Avatar from '@material-ui/core/Avatar';
+import AvatarGroup from '@material-ui/lab/AvatarGroup';
+import Tooltip from '@material-ui/core/Tooltip';
 
+import Transaction from './Transaction';
 import transactionApi from '../api/transaction'
 import groupApi from '../api/group'
-import { withRouter } from "react-router-dom";
 
 class ProjectBoard extends Component {
 
@@ -163,6 +167,28 @@ class ProjectBoard extends Component {
                         <Button color="inherit" > Logout </Button>
                     </Toolbar>
                 </AppBar>
+                <Typography variant="h4" className="childOfRoot">
+                    Project Board
+                </Typography>
+                <Grid container spacing={0} className="childOfRoot" alignItems="center" style={{ paddingTop: '8px' }}>
+                    <Grid item >
+                        <AvatarGroup>
+                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+                            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+                            <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
+                            <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+                        </AvatarGroup>
+                    </Grid>
+                    <Grid item >
+                        <Tooltip title="Add Member">
+                            <Button>
+                                <Avatar><PersonAddIcon /></Avatar>
+                            </Button>
+                        </Tooltip>
+                    </Grid>
+                </Grid>
+
                 <Grid container spacing={3} wrap="nowrap" style={{ padding: '24px' }}>
                     {this.state.groupList.map((group, index) =>
                         <Grid item key={group.groupId} style={{ minWidth: '350px' }}>

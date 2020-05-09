@@ -11,6 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -116,7 +117,8 @@ export default function Transaction(props) {
             </Header>
 
             <Comment>
-                <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
+                {/* <Avatar className={classes.avatar} style={{ margin: '0px' }}><PersonIcon /></Avatar> */}
+                <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
                 <Comment.Content>
                     <Comment.Author>Tom Lukic</Comment.Author>
                     <Comment.Text>
@@ -127,7 +129,7 @@ export default function Transaction(props) {
             </Comment>
 
             <Comment>
-                <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/stevie.jpg' />
+                <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
                 <Comment.Content>
                     <Comment.Author>Stevie Feliciano</Comment.Author>
                     <Comment.Text>
@@ -259,7 +261,7 @@ export default function Transaction(props) {
                                             <ListItem autoFocus button>
                                                 <ListItemAvatar>
                                                     <Avatar>
-                                                        <AddIcon />
+                                                        <PersonAddIcon />
                                                     </Avatar>
                                                 </ListItemAvatar>
                                                 <ListItemText primary="Add member" />
