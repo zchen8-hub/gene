@@ -12,6 +12,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import transactionApi from '../api/transaction'
+import CommentApi from '../api/comment'
+import GroupApi from '../api/group'
 
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -66,47 +68,16 @@ export default function Transaction(props) {
     var tags = [];
     var comments = [];
     var [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
-    // var [members, setMembers] = React.useState([
-    //     {
-    //         email: "george5h87a@gmail.com",
-    //         password: "123123",
-    //         phone: "1234567891",
-    //         uid: "1",
-    //         username: "George"
-    //     },
-    //     {
-    //         email: "george5h87a@gmail.com",
-    //         password: "123123",
-    //         phone: "1234567891",
-    //         uid: "2",
-    //         username: "Mike"
-    //     },
-    //     {
-    //         email: "george5h87a@gmail.com",
-    //         password: "123123",
-    //         phone: "1234567891",
-    //         uid: "3",
-    //         username: "Emily"
-    //     },
-    // ])
     const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-
-    useEffect(() => {
-        //effect
-        // return () => {
-        //     cleanup
-        // }
-    }, //[input]
-    )
 
     const handleDeleteTransaction = () => {
         props.actionDelete(props.transaction.groupId, props.transaction.transactionId);
     }
 
     const listMember = () => {
-
+        GroupApi.listAllGroups()
     }
 
     const handleDeleteMember = (uid) =>{
@@ -133,6 +104,10 @@ export default function Transaction(props) {
             }
         );
         setOpen(false);
+    }
+
+    const listComment = () =>{
+
     }
 
     const CommentExample = () => (
