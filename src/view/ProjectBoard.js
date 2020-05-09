@@ -67,7 +67,7 @@ class ProjectBoard extends Component {
         groupApi.deleteGroup(this.state.projectId, groupId, (response) => {
             if (response.code === "200") {
                 console.log("success");
-                let newGroupList = this.state.groupList.filter((group) => group.groupId != groupId);
+                let newGroupList = this.state.groupList.filter((group) => group.groupId !== groupId);
                 this.setState({ groupList: newGroupList });
             }
         })

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, CardActionArea, TextField, InputBase, IconButton } from '@material-ui/core';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
@@ -6,8 +6,6 @@ import { Button, Comment, Form, Header } from 'semantic-ui-react'
 import { List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
 import { Avatar, Grid, Typography } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
-import FolderIcon from '@material-ui/icons/Folder';
-import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
@@ -61,12 +59,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Transaction(props) {
-    const [title, setTitle] = React.useState(props.transaction.title);
-    const [description, setDescription] = React.useState(props.transaction.description);
+    const [title, setTitle] = useState(props.transaction.title);
+    const [description, setDescription] = useState(props.transaction.description);
     var tags = [];
     var comments = [];
-    // var [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
-    var [members, setMembers] = React.useState([
+    var [members, setMembers] = useState([
         {
             email: "george5h87a@gmail.com",
             password: "123123",
@@ -90,9 +87,16 @@ export default function Transaction(props) {
         },
     ])
     const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
-
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        //effect
+        // return () => {
+        //     cleanup
+        // }
+    }, //[input]
+    )
 
     const handleDeleteTransaction = () => {
         props.actionDelete(props.transaction.groupId, props.transaction.transactionId);

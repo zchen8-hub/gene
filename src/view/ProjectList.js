@@ -20,7 +20,13 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase'
+import IconButton from '@material-ui/core/IconButton';
+import ForwardIcon from '@material-ui/icons/Forward';
+
 import projectApi from '../api/project';
+import './css/ProjectList.css';
 
 class ProjectList extends Component {
     constructor(props) {
@@ -130,69 +136,89 @@ class ProjectList extends Component {
                     isLoading ?
                         <div className="row">Loading...</div>
                         :
-                        <MaterialTable
-                            icons={tableIcons}
-                            title="Projects"
-                            columns={columns}
-                            data={projectList}
-                            options={{
-                                actionsColumnIndex: -1
-                            }}
-                            onRowClick={(
-                                (event, selectedRow) => {
-                                    //fetchAPI
-                                    this.setState({
-                                        redirect: true,
-                                        projectId: selectedRow.projectId,
-                                        groupList: selectedRow.groupList,
-                                        projectName: selectedRow.name
+                        <div>
+                            <MaterialTable
+                                icons={tableIcons}
+                                title="Projects"
+                                columns={columns}
+                                data={projectList}
+                                options={{
+                                    actionsColumnIndex: -1
+                                }}
+                                onRowClick={(
+                                    (event, selectedRow) => {
+                                        //fetchAPI
+                                        this.setState({
+                                            redirect: true,
+                                            projectId: selectedRow.projectId,
+                                            groupList: selectedRow.groupList,
+                                            projectName: selectedRow.name
 
-                                    })
-                                })}
-                            editable={{
-                                onRowAdd: (newData) =>
-                                    new Promise((resolve) => {
-                                        setTimeout(() => {
-                                            resolve();
-                                            this.setState((prevState) => {
-                                                const project = [...prevState.projects];
-                                                this.createProject(newData);
-                                                projects.push(newData);
-                                                //Creator should always be the login user.
-                                                projects[project.length - 1].creator = this.props.location.state.username;
-                                                return { ...prevState, projects };
-                                            });
-                                        }, 600);
-                                    }),
-                                onRowUpdate: (newData, oldData) =>
-                                    new Promise((resolve) => {
-                                        setTimeout(() => {
-                                            resolve();
-                                            if (oldData) {
+                                        })
+                                    })}
+                                editable={{
+                                    onRowAdd: (newData) =>
+                                        new Promise((resolve) => {
+                                            setTimeout(() => {
+                                                resolve();
                                                 this.setState((prevState) => {
+                                                    const project = [...prevState.projects];
+                                                    this.createProject(newData);
+                                                    projects.push(newData);
+                                                    //Creator should always be the login user.
+                                                    projects[project.length - 1].creator = this.props.location.state.username;
+                                                    return { ...prevState, projects };
+                                                });
+                                            }, 600);
+                                        }),
+                                    onRowUpdate: (newData, oldData) =>
+                                        new Promise((resolve) => {
+                                            setTimeout(() => {
+                                                resolve();
+                                                if (oldData) {
+                                                    this.setState((prevState) => {
+                                                        const data = [...prevState.data];
+                                                        data[data.indexOf(oldData)] = newData;
+                                                        return { ...prevState, data };
+                                                    });
+                                                }
+                                            }, 600);
+                                        }),
+                                    onRowDelete: (oldData) =>
+                                        new Promise((resolve) => {
+                                            setTimeout(() => {
+                                                resolve();
+                                                this.setState((prevState) => {
+                                                    this.deleteProject(oldData.projectId);
                                                     const data = [...prevState.data];
-                                                    data[data.indexOf(oldData)] = newData;
+                                                    data.splice(data.indexOf(oldData), 1);
                                                     return { ...prevState, data };
                                                 });
-                                            }
-                                        }, 600);
-                                    }),
-                                onRowDelete: (oldData) =>
-                                    new Promise((resolve) => {
-                                        setTimeout(() => {
-                                            resolve();
-                                            this.setState((prevState) => {
-                                                this.deleteProject(oldData.projectId);
-                                                const data = [...prevState.data];
-                                                data.splice(data.indexOf(oldData), 1);
-                                                return { ...prevState, data };
-                                            });
-                                        }, 600);
-                                    }),
-                            }}
-                        />
-                }
+                                            }, 600);
+                                        }),
+                                }}
+                            />
+                            <Paper
+                                component="form"
+                                style={{
+                                    padding: '2px 4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    width: 550,
+                                }}>
 
+                                <InputBase
+                                    className="input"
+                                    placeholder="Enter invitation code"
+                                    inputProps={{ 'aria-label': 'Enter invitation code' }}
+                                    style={{paddingLeft: 20}}
+                                />
+                                <IconButton type="submit" className="iconB" aria-label="search">
+                                    <ForwardIcon />
+                                </IconButton>
+                            </Paper>
+                        </div>
+                }
             </Container>
         );
     }
