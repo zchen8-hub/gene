@@ -2,6 +2,11 @@
     flex-grow: 1;
 }
 
+.childOfRoot {
+    padding-top: 24px;
+    padding-left: 24px;
+}
+
 .menuButton{
     margin-right: 16px;
 }
