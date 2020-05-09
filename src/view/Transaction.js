@@ -12,6 +12,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 
+import transactionApi from '../api/transaction'
+
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
 
@@ -64,30 +66,30 @@ export default function Transaction(props) {
     const [description, setDescription] = React.useState(props.transaction.description);
     var tags = [];
     var comments = [];
-    // var [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
-    var [members, setMembers] = React.useState([
-        {
-            email: "george5h87a@gmail.com",
-            password: "123123",
-            phone: "1234567891",
-            uid: "1",
-            username: "George"
-        },
-        {
-            email: "george5h87a@gmail.com",
-            password: "123123",
-            phone: "1234567891",
-            uid: "2",
-            username: "Mike"
-        },
-        {
-            email: "george5h87a@gmail.com",
-            password: "123123",
-            phone: "1234567891",
-            uid: "3",
-            username: "Emily"
-        },
-    ])
+    var [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
+    // var [members, setMembers] = React.useState([
+    //     {
+    //         email: "george5h87a@gmail.com",
+    //         password: "123123",
+    //         phone: "1234567891",
+    //         uid: "1",
+    //         username: "George"
+    //     },
+    //     {
+    //         email: "george5h87a@gmail.com",
+    //         password: "123123",
+    //         phone: "1234567891",
+    //         uid: "2",
+    //         username: "Mike"
+    //     },
+    //     {
+    //         email: "george5h87a@gmail.com",
+    //         password: "123123",
+    //         phone: "1234567891",
+    //         uid: "3",
+    //         username: "Emily"
+    //     },
+    // ])
     const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
 
     const classes = useStyles();
@@ -95,6 +97,24 @@ export default function Transaction(props) {
 
     const handleDeleteTransaction = () => {
         props.actionDelete(props.transaction.groupId, props.transaction.transactionId);
+    }
+
+    const listMember = () => {
+
+    }
+
+    const handleDeleteMember = (uid) =>{
+        debugger;
+        transactionApi.deleteUserFromTransaction(props.transaction.transactionId,uid,(Response)=>{
+            
+        })
+        
+    }
+
+    const handleAddmember = ()=>{
+        transactionApi.addUserToTransaction(props.transaction.transactionId,props.transaction.creatorId,(Response)=>{
+            setMembers(Response.data);
+        })
     }
 
     const handleCloseDialog = () => {
@@ -145,8 +165,7 @@ export default function Transaction(props) {
     )
 
     function GenerateListItem() {
-        console.log(props.userId);
-        console.log(props.transaction.creatorId);
+        debugger;
         return members.map((member) =>
             <ListItem button key={member.uid}>
                 <ListItemAvatar>
@@ -158,8 +177,8 @@ export default function Transaction(props) {
                 <ListItemSecondaryAction>
                     {
                         props.userId === props.transaction.creatorId ?
-                            <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon />
+                            <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteMember(member.uid)}>
+                                <DeleteIcon/>
                             </IconButton>
                             :
                             null
@@ -169,6 +188,12 @@ export default function Transaction(props) {
         );
     }
 
+    // useEffect(() => {
+    //     effect
+    //     return () => {
+    //         cleanup
+    //     };
+    // }, [input]);
     return (
         <div>
             <Card className="transaction-root">
@@ -237,9 +262,9 @@ export default function Transaction(props) {
                                         <List>
                                             <ListItem>
                                                 <ListItemAvatar>
-                                                    <Avatar>
+                                                     <Avatar>
                                                         {creator.username.toUpperCase().slice(0, 2)}
-                                                    </Avatar>
+                                                    </Avatar> 
                                                 </ListItemAvatar>
                                                 <ListItemText
                                                     primary={creator.username}
@@ -262,7 +287,7 @@ export default function Transaction(props) {
                                                         <AddIcon />
                                                     </Avatar>
                                                 </ListItemAvatar>
-                                                <ListItemText primary="Add member" />
+                                                <ListItemText primary="Add member"  onClick ={handleAddmember}/>
                                             </ListItem>
                                         </List>
                                     </div>
