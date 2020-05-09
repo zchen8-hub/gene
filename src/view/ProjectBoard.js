@@ -14,6 +14,11 @@ import { Card, CardContent, CardActions, Grid, TextField } from '@material-ui/co
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Tooltip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import Transaction from './Transaction';
 import transactionApi from '../api/transaction'
@@ -32,6 +37,7 @@ class ProjectBoard extends Component {
             onFocusingTitleId: "",
             onFocusingTitleValue: "",
             groupTitleBtn: null,
+            inviCodeDialogToggle: false,
         }
     }
 
@@ -150,6 +156,12 @@ class ProjectBoard extends Component {
         )
     }
 
+    handleInviCodeDialogToggle() {
+        this.setState({
+            inviCodeDialogToggle: !this.state.inviCodeDialogToggle
+        })
+    }
+
     render() {
         return (
             <div className="root" >
@@ -182,10 +194,39 @@ class ProjectBoard extends Component {
                     </Grid>
                     <Grid item >
                         <Tooltip title="Add Member">
-                            <Button>
+                            <Button onClick={() => this.handleInviCodeDialogToggle()}>
                                 <Avatar><PersonAddIcon /></Avatar>
                             </Button>
                         </Tooltip>
+                        <Dialog
+                            open={this.state.inviCodeDialogToggle}
+                            onClose={() => this.handleInviCodeDialogToggle()}
+                            aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Generate Invitation Code</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Invite your teammates by invitation code!
+                                </DialogContentText>
+                                <TextField
+                                    margin="dense"
+                                    id="name"
+                                    type="email"
+                                    variant="outlined"
+                                    fullWidth
+                                    InputProps={{
+                                        readOnly: true
+                                    }}
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.handleInviCodeDialogToggle()} color="primary">
+                                    Cancel
+                                    </Button>
+                                <Button onClick={() => this.handleInviCodeDialogToggle()} color="primary">
+                                    Generate
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </Grid>
                 </Grid>
 
