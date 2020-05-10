@@ -66,32 +66,33 @@ export default function Transaction(props) {
     var tags = [];
     var comments = [];
     var [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
-    // var [members, setMembers] = React.useState([
-    //     {
-    //         email: "george5h87a@gmail.com",
-    //         password: "123123",
-    //         phone: "1234567891",
-    //         uid: "1",
-    //         username: "George"
-    //     },
-    //     {
-    //         email: "george5h87a@gmail.com",
-    //         password: "123123",
-    //         phone: "1234567891",
-    //         uid: "2",
-    //         username: "Mike"
-    //     },
-    //     {
-    //         email: "george5h87a@gmail.com",
-    //         password: "123123",
-    //         phone: "1234567891",
-    //         uid: "3",
-    //         username: "Emily"
-    //     },
-    // ])
+    const [projMembers, setProjMembers] = React.useState([
+        {
+            email: "george5h87a@gmail.com",
+            password: "123123",
+            phone: "1234567891",
+            uid: "1",
+            username: "George"
+        },
+        {
+            email: "george5h87a@gmail.com",
+            password: "123123",
+            phone: "1234567891",
+            uid: "2",
+            username: "Mike"
+        },
+        {
+            email: "george5h87a@gmail.com",
+            password: "123123",
+            phone: "1234567891",
+            uid: "3",
+            username: "Emily"
+        },
+    ])
     const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false);
 
     useEffect(() => {
         //effect
@@ -109,18 +110,17 @@ export default function Transaction(props) {
 
     }
 
-    const handleDeleteMember = (uid) =>{
-        debugger;
-        transactionApi.deleteUserFromTransaction(props.transaction.transactionId,uid,(Response)=>{
-            
+    const handleDeleteMember = (uid) => {
+        transactionApi.deleteUserFromTransaction(props.transaction.transactionId, uid, (Response) => {
+
         })
-        
     }
 
-    const handleAddmember = ()=>{
-        transactionApi.addUserToTransaction(props.transaction.transactionId,props.transaction.creatorId,(Response)=>{
-            setMembers(Response.data);
-        })
+    const handleAddmember = (uid) => {
+        // transactionApi.addUserToTransaction(props.transaction.transactionId, uid, (Response) => {
+        //     setMembers(Response.data);
+        // })
+        console.log("handleAddmember: " + uid);
     }
 
     const handleCloseDialog = () => {
@@ -172,7 +172,6 @@ export default function Transaction(props) {
     )
 
     function GenerateListItem() {
-        debugger;
         return members.map((member) =>
             <ListItem button key={member.uid}>
                 <ListItemAvatar>
@@ -185,7 +184,7 @@ export default function Transaction(props) {
                     {
                         props.userId === props.transaction.creatorId ?
                             <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteMember(member.uid)}>
-                                <DeleteIcon/>
+                                <DeleteIcon />
                             </IconButton>
                             :
                             null
@@ -194,6 +193,29 @@ export default function Transaction(props) {
             </ListItem>
         );
     }
+
+    const AddMemberDialog = () => (
+        <Dialog 
+            open={addMemberDialogOpen} 
+            onClose={() => setAddMemberDialogOpen(false)}>
+            <DialogTitle id="simple-dialog-title">Please select user</DialogTitle>
+            <List>
+                {projMembers.map((member) => (
+                    <ListItem
+                        button
+                        onClick={() => handleAddmember(member.uid)}
+                        key={member.username}>
+                        <ListItemAvatar>
+                            <Avatar className={classes.avatar}>
+                                <PersonIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={member.username} />
+                    </ListItem>
+                ))}
+            </List>
+        </Dialog>
+    )
 
     // useEffect(() => {
     //     effect
@@ -269,9 +291,9 @@ export default function Transaction(props) {
                                         <List>
                                             <ListItem>
                                                 <ListItemAvatar>
-                                                     <Avatar>
+                                                    <Avatar>
                                                         {creator.username.toUpperCase().slice(0, 2)}
-                                                    </Avatar> 
+                                                    </Avatar>
                                                 </ListItemAvatar>
                                                 <ListItemText
                                                     primary={creator.username}
@@ -294,9 +316,10 @@ export default function Transaction(props) {
                                                         <PersonAddIcon />
                                                     </Avatar>
                                                 </ListItemAvatar>
-                                                <ListItemText primary="Add member"  onClick ={handleAddmember}/>
+                                                <ListItemText primary="Add member" onClick={() => setAddMemberDialogOpen(true)} />
                                             </ListItem>
                                         </List>
+                                        <AddMemberDialog />
                                     </div>
                                 </Grid>
                             </Grid>
