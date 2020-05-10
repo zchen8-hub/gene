@@ -12,6 +12,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import transactionApi from '../api/transaction'
+import CommentApi from '../api/comment'
+import GroupApi from '../api/group'
 
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -61,11 +63,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Transaction(props) {
+    const classes = useStyles();
     const [title, setTitle] = useState(props.transaction.title);
     const [description, setDescription] = useState(props.transaction.description);
-    var tags = [];
-    var comments = [];
-    var [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
+    const [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
+    const [open, setOpen] = useState(false);
+    const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false);
+    const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
+
     const [projMembers, setProjMembers] = React.useState([
         {
             email: "george5h87a@gmail.com",
@@ -89,10 +94,9 @@ export default function Transaction(props) {
             username: "Emily"
         },
     ])
-    const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
-    const classes = useStyles();
-    const [open, setOpen] = useState(false);
-    const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false);
+    
+    var tags = [];
+    var comments = [];
 
     useEffect(() => {
         //effect
@@ -107,7 +111,7 @@ export default function Transaction(props) {
     }
 
     const listMember = () => {
-
+        GroupApi.listAllGroups()
     }
 
     const handleDeleteMember = (uid) => {
@@ -134,7 +138,9 @@ export default function Transaction(props) {
         );
         setOpen(false);
     }
+    const listComment = () =>{
 
+    }
     const CommentExample = () => (
         <Comment.Group>
             <Header as='h3' dividing>

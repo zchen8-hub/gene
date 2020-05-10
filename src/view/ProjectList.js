@@ -37,6 +37,7 @@ class ProjectList extends Component {
             redirect: false,
             projectId: '',
             projectName: '',
+            invite_code: '',
             groupList: [],
             userId: this.props.match.params.userId,
         }
@@ -68,6 +69,18 @@ class ProjectList extends Component {
             window.location.reload(true);
         })
 
+    }
+
+    handleInvite(){
+        debugger;
+        projectApi.addUsertoProject(this.props.match.params.userId,this.state.invite_code,(response)=>{
+            this.setState({ 
+                redirect: true,
+                projectId: response.data.projectId,
+                projectName: response.data.projectName,
+                groupList: response.data.groupList
+            });
+        })
     }
 
     render() {
@@ -212,8 +225,11 @@ class ProjectList extends Component {
                                     placeholder="Enter invitation code"
                                     inputProps={{ 'aria-label': 'Enter invitation code' }}
                                     style={{paddingLeft: 20}}
+                                    onChange={event=>{
+                                        this.setState({invite_code: event.target.value})
+                                      }}
                                 />
-                                <IconButton type="submit" className="iconB" aria-label="search">
+                                <IconButton type="submit" className="iconB" aria-label="search" onClick ={()=>this.handleInvite()}>
                                     <ForwardIcon />
                                 </IconButton>
                             </Paper>
