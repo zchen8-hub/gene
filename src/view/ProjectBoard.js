@@ -37,6 +37,7 @@ class ProjectBoard extends Component {
             groupList: [],
             tagList: [],
             onAddingGroup: false,
+            inviteCode:'',
             onFocusingTitleId: "",
             onFocusingTitleValue: "",
             groupTitleBtn: null,
@@ -161,6 +162,13 @@ class ProjectBoard extends Component {
         })
     }
 
+    generateInviteCode(){
+        projectApi.createInviteCode(this.state.userId, this.state.projectId, (response)=>{
+            debugger;
+            this.setState({inviteCode: response.msg});
+        })
+    }
+
     render() {
         return (
             <div className="root" >
@@ -212,6 +220,7 @@ class ProjectBoard extends Component {
                                     type="email"
                                     variant="outlined"
                                     fullWidth
+                                    value = {this.state.inviteCode}
                                     InputProps={{
                                         readOnly: true
                                     }}
@@ -221,7 +230,7 @@ class ProjectBoard extends Component {
                                 <Button onClick={() => this.handleInviCodeDialogToggle()} color="primary">
                                     Cancel
                                     </Button>
-                                <Button onClick={() => this.handleInviCodeDialogToggle()} color="primary">
+                                <Button onClick={() => this.generateInviteCode()} color="primary">
                                     Generate
                                 </Button>
                             </DialogActions>

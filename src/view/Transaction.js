@@ -209,7 +209,7 @@ export default function Transaction(props) {
             onClose={() => setAddMemberDialogOpen(false)}>
             <DialogTitle id="simple-dialog-title">Please select user</DialogTitle>
             <List>
-                {projectMembers.map((member) => (
+                {projectMembers.filter(member => member.uid !== props.transaction.creatorId).map((member) => (
                     <ListItem
                         button
                         onClick={() => handleAddmember(member.uid)}
