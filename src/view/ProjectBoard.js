@@ -21,8 +21,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import Transaction from './Transaction';
-import transactionApi from '../api/transaction'
-import groupApi from '../api/group'
+import transactionApi from '../api/transaction';
+import groupApi from '../api/group';
+import projectApi from '../api/project';
 
 class ProjectBoard extends Component {
 
@@ -30,6 +31,8 @@ class ProjectBoard extends Component {
         super(props);
         this.state = {
             projectId: this.props.match.params.projectId,
+            project: {},
+            projectMembers: [],
             userId: props.location.state.userId,
             groupList: [],
             tagList: [],
@@ -42,21 +45,17 @@ class ProjectBoard extends Component {
     }
 
     componentDidMount() {
-        //console.log("onChangingGroupTitle: " + this.state.onChangingGroupTitle);
-        console.log("user id: " + this.state.userId);
-
-        groupApi.listAllGroups(this.state.projectId, (response) => {
-            this.setState({ groupList: response.data.reverse() });
-            console.log(this.state.groupList);
-            //console.log("List Groups Response: " + response.data);
+        projectApi.getProject(this.state.userId, this.state.projectId, (response) => {
+            this.setState({ 
+                project: response.data,
+                projectMembers: response.data.userDTOs,
+                groupList: response.data.groupDTOS.reverse(), 
+            });
         })
 
-
-        /*groupList.forEach(group => {
-            transactionApi.listAllTransaction(group.groupId,(response)=>{
-                group.transactionList = response.data;
-            })
-        });*/
+        console.log("user id: " + this.state.userId);
+        console.log(this.state.project);
+        console.log(this.state.groupList);
     }
 
     addGroup(groupname) {
@@ -264,6 +263,7 @@ class ProjectBoard extends Component {
                                                     key={transaction.transactionId}
                                                     userId={this.state.userId}
                                                     transaction={transaction}
+                                                    projectMembers={this.state.projectMembers}
                                                     actionDelete={this.deleteTransaction}
                                                     actionUpdate={this.updateTransaction} />
                                             )

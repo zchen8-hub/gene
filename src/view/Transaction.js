@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, CardActionArea, TextField, InputBase, IconButton } from '@material-ui/core';
+import { Card, CardContent, CardActionArea, TextField, InputBase, IconButton, TextareaAutosize } from '@material-ui/core';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Button, Comment, Form, Header } from 'semantic-ui-react'
 import { List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
@@ -10,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Container from '@material-ui/core/Container';
 
 import transactionApi from '../api/transaction'
 import CommentApi from '../api/comment'
@@ -60,70 +61,40 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
-
 export default function Transaction(props) {
     const classes = useStyles();
+    const [transaction, setTransaction] = useState(props.transaction);
     const [title, setTitle] = useState(props.transaction.title);
     const [description, setDescription] = useState(props.transaction.description);
-    const [members, setMembers] = React.useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
+    const [transactionMembers, setTransactionMembers] = useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
     const [open, setOpen] = useState(false);
     const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false);
     const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
+    const [projectMembers, setProjectMembers] = useState(props.projectMembers);
+    const [commentValue, setCommentValue] = useState("");
+    //var commentValue = "";
 
-    const [projMembers, setProjMembers] = React.useState([
-        {
-            email: "george5h87a@gmail.com",
-            password: "123123",
-            phone: "1234567891",
-            uid: "1",
-            username: "George"
-        },
-        {
-            email: "george5h87a@gmail.com",
-            password: "123123",
-            phone: "1234567891",
-            uid: "2",
-            username: "Mike"
-        },
-        {
-            email: "george5h87a@gmail.com",
-            password: "123123",
-            phone: "1234567891",
-            uid: "3",
-            username: "Emily"
-        },
-    ])
-    
     var tags = [];
     var comments = [];
 
     useEffect(() => {
-        //effect
-        // return () => {
-        //     cleanup
-        // }
-    }, //[input]
-    )
+        //console.log(props.transaction);
+    })
 
     const handleDeleteTransaction = () => {
         props.actionDelete(props.transaction.groupId, props.transaction.transactionId);
     }
 
-    const listMember = () => {
-        GroupApi.listAllGroups()
-    }
-
     const handleDeleteMember = (uid) => {
         transactionApi.deleteUserFromTransaction(props.transaction.transactionId, uid, (Response) => {
-
+            setTransactionMembers(transactionMembers.filter(member => member.uid !== uid));
         })
     }
 
     const handleAddmember = (uid) => {
-        // transactionApi.addUserToTransaction(props.transaction.transactionId, uid, (Response) => {
-        //     setMembers(Response.data);
-        // })
+        transactionApi.addUserToTransaction(props.transaction.transactionId, uid, (response) => {
+            setTransaction(response.data);
+        })
         console.log("handleAddmember: " + uid);
     }
 
@@ -138,47 +109,79 @@ export default function Transaction(props) {
         );
         setOpen(false);
     }
-    const listComment = () =>{
 
+    const handleCommentChange = (event) => {
+        setCommentValue(event.target.value);
     }
+
+    const handleCommentSubmit = (content) => {
+        let comment = {
+            comment: content
+        }
+        CommentApi.addComment(
+            props.userId,
+            transaction.transactionId,
+            comment,
+            (response) => {
+                comments.push(response.data);
+            })
+    }
+
     const CommentExample = () => (
         <Comment.Group>
             <Header as='h3' dividing>
                 Comments
             </Header>
-
+            {
+                comments.map((comment) =>
+                    <Comment>
+                        <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
+                        <Comment.Content>
+                            <Comment.Author>
+                                {transactionMembers.find(member => member.uid === comment.createrId).username}
+                            </Comment.Author>
+                            <Comment.Text>
+                                {comment.comment}
+                            </Comment.Text>
+                        </Comment.Content>
+                    </Comment>
+                )
+            }
+            {/* <Form reply>
+                <Form.TextArea
+                    placeholder="add some comments"
+                    value={commentValue}
+                    onChange={handleCommentChange}/>
+                <TextareaAutosize
+                    placeholder="add some comments"
+                    value={commentValue}
+                    onChange={(event) => setCommentValue(event.target.value)} />
+                <Button
+                    content='Add Reply'
+                    labelPosition='left'
+                    icon='edit'
+                    primary
+                    onClick={() => handleCommentSubmit()} />
+            </Form> */}
             <Comment>
-                {/* <Avatar className={classes.avatar} style={{ margin: '0px' }}><PersonIcon /></Avatar> */}
-                <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
-                <Comment.Content>
-                    <Comment.Author>Tom Lukic</Comment.Author>
-                    <Comment.Text>
-                        This will be great for business reports. I will definitely download
-                        this.
-                    </Comment.Text>
-                </Comment.Content>
+                <TextareaAutosize
+                    placeholder="add some comments"
+                    value={commentValue}
+                    style={{display: 'block'}}
+                    onChange={(event) => setCommentValue(event.target.value)} />
+                <Button
+                    content='Add Reply'
+                    labelPosition='left'
+                    icon='edit'
+                    primary
+                    style={{display: 'block'}}
+                    onClick={() => handleCommentSubmit()} />
             </Comment>
-
-            <Comment>
-                <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
-                <Comment.Content>
-                    <Comment.Author>Stevie Feliciano</Comment.Author>
-                    <Comment.Text>
-                        Hey guys, I hope this example comment is helping you read this
-                        documentation.
-                    </Comment.Text>
-                </Comment.Content>
-            </Comment>
-
-            <Form reply>
-                <Form.TextArea />
-                <Button content='Add Reply' labelPosition='left' icon='edit' primary />
-            </Form>
         </Comment.Group>
     )
 
     function GenerateListItem() {
-        return members.map((member) =>
+        return transactionMembers.map((member) =>
             <ListItem button key={member.uid}>
                 <ListItemAvatar>
                     <Avatar className={classes.avatar}>
@@ -201,12 +204,12 @@ export default function Transaction(props) {
     }
 
     const AddMemberDialog = () => (
-        <Dialog 
-            open={addMemberDialogOpen} 
+        <Dialog
+            open={addMemberDialogOpen}
             onClose={() => setAddMemberDialogOpen(false)}>
             <DialogTitle id="simple-dialog-title">Please select user</DialogTitle>
             <List>
-                {projMembers.map((member) => (
+                {projectMembers.map((member) => (
                     <ListItem
                         button
                         onClick={() => handleAddmember(member.uid)}

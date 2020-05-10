@@ -13,6 +13,12 @@ class ProjectApi {
         return httpService.get(url, callback);
     }
 
+    static getProject(uid, pid, callback) {
+        let url = `user/${uid}/project/${pid}`;
+
+        return httpService.get(url, callback);
+    }
+
     static deleteProject(uid, pid, callback) {
         let url = `user/${uid}/project/${pid}`;
 
