@@ -127,58 +127,21 @@ export default function Transaction(props) {
             })
     }
 
-    const CommentExample = () => (
-        <Comment.Group>
-            <Header as='h3' dividing>
-                Comments
-            </Header>
-            {
-                comments.map((comment) =>
-                    <Comment>
-                        <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
-                        <Comment.Content>
-                            <Comment.Author>
-                                {transactionMembers.find(member => member.uid === comment.createrId).username}
-                            </Comment.Author>
-                            <Comment.Text>
-                                {comment.comment}
-                            </Comment.Text>
-                        </Comment.Content>
-                    </Comment>
-                )
-            }
-            {/* <Form reply>
-                <Form.TextArea
-                    placeholder="add some comments"
-                    value={commentValue}
-                    onChange={handleCommentChange}/>
-                <TextareaAutosize
-                    placeholder="add some comments"
-                    value={commentValue}
-                    onChange={(event) => setCommentValue(event.target.value)} />
-                <Button
-                    content='Add Reply'
-                    labelPosition='left'
-                    icon='edit'
-                    primary
-                    onClick={() => handleCommentSubmit()} />
-            </Form> */}
+    function CommentExample() {
+        return comments.map((comment) =>
             <Comment>
-                <TextareaAutosize
-                    placeholder="add some comments"
-                    value={commentValue}
-                    style={{display: 'block'}}
-                    onChange={(event) => setCommentValue(event.target.value)} />
-                <Button
-                    content='Add Reply'
-                    labelPosition='left'
-                    icon='edit'
-                    primary
-                    style={{display: 'block'}}
-                    onClick={() => handleCommentSubmit()} />
+                <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
+                <Comment.Content>
+                    <Comment.Author>
+                        {transactionMembers.find(member => member.uid === comment.createrId).username}
+                    </Comment.Author>
+                    <Comment.Text>
+                        {comment.comment}
+                    </Comment.Text>
+                </Comment.Content>
             </Comment>
-        </Comment.Group>
-    )
+        );
+    }
 
     function GenerateListItem() {
         return transactionMembers.map((member) =>
@@ -289,7 +252,24 @@ export default function Transaction(props) {
                                     </Button>
                                     <Button style={{backgroundColor: 'inherit'}}>Cancel</Button>
                                 </Grid> */}
-                                <CommentExample />
+                                <Comment.Group>
+                                    <Header as='h3' dividing>
+                                        Comments
+                                     </Header>
+                                    <CommentExample />
+                                    <Form reply>
+                                        <Form.TextArea
+                                            placeholder="add some comments"
+                                            value={commentValue}
+                                            onChange={handleCommentChange} />
+                                        <Button
+                                            content='Add Reply'
+                                            labelPosition='left'
+                                            icon='edit'
+                                            primary
+                                            onClick={() => handleCommentSubmit()} />
+                                    </Form>
+                                </Comment.Group>
                             </Grid>
                             <Grid item xs={4} container direction="column">
                                 <Grid item>
