@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, CardActionArea, TextField, InputBase, IconButton, TextareaAutosize } from '@material-ui/core';
+import { Card, CardContent, CardActionArea, TextField, InputBase, IconButton } from '@material-ui/core';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Button, Comment, Form, Header } from 'semantic-ui-react'
 import { List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
@@ -10,11 +10,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import Container from '@material-ui/core/Container';
 
 import transactionApi from '../api/transaction'
 import CommentApi from '../api/comment'
-import GroupApi from '../api/group'
 
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -66,27 +64,30 @@ export default function Transaction(props) {
     const [transaction, setTransaction] = useState(props.transaction);
     const [title, setTitle] = useState(props.transaction.title);
     const [description, setDescription] = useState(props.transaction.description);
-    const [transactionMembers, setTransactionMembers] = useState(props.transaction.userDTOS.filter(user => user.uid !== props.transaction.creatorId));
+    const [transactionMembers, setTransactionMembers] = useState(props.transaction.userDTOS);
     const [open, setOpen] = useState(false);
     const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false);
     const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
     const [projectMembers, setProjectMembers] = useState(props.projectMembers);
     const [commentValue, setCommentValue] = useState("");
-    //var commentValue = "";
-
+    const [comments, setComments] = useState([]);
     var tags = [];
-    var comments = [];
 
     useEffect(() => {
-        //console.log(props.transaction);
-    })
+        CommentApi.listAllComment(props.userId, transaction.transactionId, (response) => {
+            setComments(response.data);   
+            //console.log("comments: " + comments);
+        })
+        console.log("transactionMembers");
+        console.log(transactionMembers);
+    }, []);
 
     const handleDeleteTransaction = () => {
         props.actionDelete(props.transaction.groupId, props.transaction.transactionId);
     }
 
     const handleDeleteMember = (uid) => {
-        transactionApi.deleteUserFromTransaction(props.transaction.transactionId, uid, (Response) => {
+        transactionApi.deleteUserFromTransaction(props.transaction.transactionId, uid, (response) => {
             setTransactionMembers(transactionMembers.filter(member => member.uid !== uid));
         })
     }
@@ -95,7 +96,7 @@ export default function Transaction(props) {
         transactionApi.addUserToTransaction(props.transaction.transactionId, uid, (response) => {
             setTransaction(response.data);
         })
-        console.log("handleAddmember: " + uid);
+        //console.log("handleAddmember: " + uid);
     }
 
     const handleCloseDialog = () => {
@@ -112,11 +113,13 @@ export default function Transaction(props) {
 
     const handleCommentChange = (event) => {
         setCommentValue(event.target.value);
+        //console.log(commentValue);
     }
 
-    const handleCommentSubmit = (content) => {
+    const handleCommentSubmit = () => {
+        debugger;
         let comment = {
-            comment: content
+            comment: commentValue
         }
         CommentApi.addComment(
             props.userId,
@@ -124,12 +127,13 @@ export default function Transaction(props) {
             comment,
             (response) => {
                 comments.push(response.data);
+                setCommentValue("");
             })
     }
 
     function CommentExample() {
         return comments.map((comment) =>
-            <Comment>
+            <Comment key={comment.commentId}>
                 <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
                 <Comment.Content>
                     <Comment.Author>
@@ -143,8 +147,8 @@ export default function Transaction(props) {
         );
     }
 
-    function GenerateListItem() {
-        return transactionMembers.map((member) =>
+    function GenerateMemberListItem() {
+        return transactionMembers.filter(member => member.uid !== transaction.creatorId).map((member) =>
             <ListItem button key={member.uid}>
                 <ListItemAvatar>
                     <Avatar className={classes.avatar}>
@@ -189,12 +193,6 @@ export default function Transaction(props) {
         </Dialog>
     )
 
-    // useEffect(() => {
-    //     effect
-    //     return () => {
-    //         cleanup
-    //     };
-    // }, [input]);
     return (
         <div>
             <Card className="transaction-root">
@@ -298,7 +296,7 @@ export default function Transaction(props) {
                                     </Typography>
                                     <div className={classes.demo}>
                                         <List dense={true}>
-                                            <GenerateListItem />
+                                            <GenerateMemberListItem />
                                             <ListItem autoFocus button>
                                                 <ListItemAvatar>
                                                     <Avatar>

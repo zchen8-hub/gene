@@ -13,7 +13,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import userApi from "../api/user";
 import CopyRight from "../components/copyright";
-import useStyles from "../components/useStyles";
 
 class SignUp extends Component {
     constructor(props){

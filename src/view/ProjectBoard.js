@@ -37,7 +37,7 @@ class ProjectBoard extends Component {
             groupList: [],
             tagList: [],
             onAddingGroup: false,
-            inviteCode:'',
+            inviteCode: '',
             onFocusingTitleId: "",
             onFocusingTitleValue: "",
             groupTitleBtn: null,
@@ -47,16 +47,15 @@ class ProjectBoard extends Component {
 
     componentDidMount() {
         projectApi.getProject(this.state.userId, this.state.projectId, (response) => {
-            this.setState({ 
-                project: response.data,
-                projectMembers: response.data.userDTOs,
-                groupList: response.data.groupDTOS.reverse(), 
-            });
+            this.setState({ project: response.data });
+            this.setState({ projectMembers: response.data.userDTOs });
+            this.setState({ groupList: response.data.groupDTOS.reverse() })
+            console.log(this.state.project);
+            console.log(this.state.projectMembers);
+            console.log(this.state.groupList);
         })
 
         console.log("user id: " + this.state.userId);
-        console.log(this.state.project);
-        console.log(this.state.groupList);
     }
 
     addGroup(groupname) {
@@ -162,10 +161,10 @@ class ProjectBoard extends Component {
         })
     }
 
-    generateInviteCode(){
-        projectApi.createInviteCode(this.state.userId, this.state.projectId, (response)=>{
+    generateInviteCode() {
+        projectApi.createInviteCode(this.state.userId, this.state.projectId, (response) => {
             debugger;
-            this.setState({inviteCode: response.msg});
+            this.setState({ inviteCode: response.msg });
         })
     }
 
@@ -220,7 +219,7 @@ class ProjectBoard extends Component {
                                     type="email"
                                     variant="outlined"
                                     fullWidth
-                                    value = {this.state.inviteCode}
+                                    value={this.state.inviteCode}
                                     InputProps={{
                                         readOnly: true
                                     }}

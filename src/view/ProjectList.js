@@ -1,7 +1,6 @@
 import React, { Component, forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from "react-router-dom";
 import { Redirect } from 'react-router-dom'
 
@@ -64,21 +63,19 @@ class ProjectList extends Component {
     }
 
     deleteProject(projectId) {
-        debugger;
         projectApi.deleteProject(this.props.match.params.userId, projectId, (response) => {
             window.location.reload(true);
         })
 
     }
 
-    handleInvite(){
-        debugger;
-        projectApi.addUsertoProject(this.props.match.params.userId,this.state.invite_code,(response)=>{
-            this.setState({ 
+    handleInvite() {
+        projectApi.addUsertoProject(this.props.match.params.userId, this.state.invite_code, (response) => {
+            this.setState({
                 redirect: true,
                 projectId: response.data.projectId,
                 projectName: response.data.projectName,
-                groupList: response.data.groupDTOS
+                groupList: response.data.groupList
             });
         })
     }
@@ -119,6 +116,19 @@ class ProjectList extends Component {
         let { isLoading, projects } = this.state;
         const projectList = [];
 
+        if (projects) {
+            projects.forEach(project => {
+                projectList.push(
+                    {
+                        "name": project.projectName,
+                        "creator": this.props.location.state.username,
+                        "projectId": project.projectId,
+                        "groupList": project.groupList
+                    }
+                )
+            });
+        }
+
         if (this.state.redirect) {
             return <Redirect to={{
                 pathname: `/ProjectBoard/${this.state.projectId}`,
@@ -128,19 +138,6 @@ class ProjectList extends Component {
                     userId: this.state.userId,
                 }
             }} />;
-        }
-
-        if (projects) {
-            projects.forEach(project => {
-                projectList.push(
-                    {
-                        "name": project.projectName,
-                        "creator": project.creatorName,
-                        "projectId": project.projectId,
-                        "groupList": project.groupDTOS
-                    }
-                )
-            });
         }
 
         return (
@@ -224,12 +221,12 @@ class ProjectList extends Component {
                                     className="input"
                                     placeholder="Enter invitation code"
                                     inputProps={{ 'aria-label': 'Enter invitation code' }}
-                                    style={{paddingLeft: 20}}
-                                    onChange={event=>{
-                                        this.setState({invite_code: event.target.value})
-                                      }}
+                                    style={{ paddingLeft: 20 }}
+                                    onChange={event => {
+                                        this.setState({ invite_code: event.target.value })
+                                    }}
                                 />
-                                <IconButton type="submit" className="iconB" aria-label="search" onClick ={()=>this.handleInvite()}>
+                                <IconButton type="submit" className="iconB" aria-label="search" onClick={() => this.handleInvite()}>
                                     <ForwardIcon />
                                 </IconButton>
                             </Paper>

@@ -14,7 +14,6 @@ import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom'
 
 import CopyRight from "../components/copyright";
-import useStyles from "../components/useStyles";
 import userApi from "../api/user"
 
 class SignIn extends Component {
