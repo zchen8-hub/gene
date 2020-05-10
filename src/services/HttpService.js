@@ -9,10 +9,7 @@ class HttpService {
                     callbackSuccess(response);
                 } else {
                     alert("unable to process request: " + xhr.status);
-                } 
-                // else {
-                //     callbackError();
-                // }
+                }
             }
         }
     }
@@ -24,7 +21,7 @@ class HttpService {
 
         xhr.open('GET', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        
+
         xhr.send();
         this.handleResponse(xhr, callback);
 
@@ -44,7 +41,6 @@ class HttpService {
         xhr.send(js);
 
         this.handleResponse(xhr, callback);
-
         return xhr;
     }
 

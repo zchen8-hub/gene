@@ -78,7 +78,7 @@ class ProjectList extends Component {
                 redirect: true,
                 projectId: response.data.projectId,
                 projectName: response.data.projectName,
-                groupList: response.data.groupList
+                groupList: response.data.groupDTOS
             });
         })
     }
@@ -119,19 +119,6 @@ class ProjectList extends Component {
         let { isLoading, projects } = this.state;
         const projectList = [];
 
-        if (projects) {
-            projects.forEach(project => {
-                projectList.push(
-                    {
-                        "name": project.projectName,
-                        "creator": this.props.location.state.username,
-                        "projectId": project.projectId,
-                        "groupList": project.groupList
-                    }
-                )
-            });
-        }
-
         if (this.state.redirect) {
             return <Redirect to={{
                 pathname: `/ProjectBoard/${this.state.projectId}`,
@@ -141,6 +128,19 @@ class ProjectList extends Component {
                     userId: this.state.userId,
                 }
             }} />;
+        }
+
+        if (projects) {
+            projects.forEach(project => {
+                projectList.push(
+                    {
+                        "name": project.projectName,
+                        "creator": project.creatorName,
+                        "projectId": project.projectId,
+                        "groupList": project.groupDTOS
+                    }
+                )
+            });
         }
 
         return (
