@@ -94,10 +94,8 @@ export default function Transaction(props) {
         console.log(uid);
         transactionApi.deleteUserFromTransaction(props.transaction.transactionId, uid, (response) => {
             if (response.code === "200") {
-                setTransaction(response.data);
-                setTransactionMembers(response.data.userDTOS);
+                window.location.reload(true);
             }
-            console.log(transactionMembers);
         })
     }
 
@@ -106,11 +104,8 @@ export default function Transaction(props) {
         console.log(uid);
         transactionApi.addUserToTransaction(props.transaction.transactionId, uid, (response) => {
             if (response.code === "200") {
-                setTransaction(response.data);
-                setTransactionMembers(response.data.userDTOS)
-                setAddMemberDialogOpen(false);
+                window.location.reload(true);
             }
-            console.log(transactionMembers);
         })
     }
 
