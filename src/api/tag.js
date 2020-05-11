@@ -2,7 +2,7 @@ import httpService from '../services/HttpService';
 
 class TagApi {
     static listAllTags(pid, callback) {
-        let url = 'project/${pid}/tags';
+        let url = `project/${pid}/tags`;
 
         return httpService.get(url, callback);
     }

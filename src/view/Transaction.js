@@ -11,12 +11,13 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Chip from '@material-ui/core/Chip';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
 import transactionApi from '../api/transaction'
 import CommentApi from '../api/comment'
-
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
+import TagApi from '../api/tag';
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
@@ -59,20 +60,33 @@ const useStyles = makeStyles((theme) => ({
         verticalAlign: 'top'
     }
 }));
+const filter = createFilterOptions();
 
 export default function Transaction(props) {
     const classes = useStyles();
     const [transaction, setTransaction] = useState(props.transaction);
     const [title, setTitle] = useState(props.transaction.title);
     const [description, setDescription] = useState(props.transaction.description);
-    const [transactionMembers, setTransactionMembers] = useState(props.transaction.userDTOS);
+    const [transactionMembers, setTransactionMembers] = useState(props.transaction.userDTOs);
     const [open, setOpen] = useState(false);
     const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false);
-    const creator = props.transaction.userDTOS.filter(user => user.uid === props.transaction.creatorId)[0];
+    const creator = props.transaction.userDTOs.filter(user => user.uid === props.transaction.creatorId)[0];
     const [projectMembers, setProjectMembers] = useState(props.projectMembers);
     const [commentValue, setCommentValue] = useState("");
     const [comments, setComments] = useState([]);
-    var tags = [];
+    const [tags, setTags] = useState(props.tags);
+    // const tags = [
+    //     {
+    //         tagName: "123"
+    //     },
+    //     {
+    //         tagName: "456"
+    //     },
+    //     {
+    //         tagName: "789"
+    //     }
+    // ];
+    const [value, setValue] = React.useState(null);
 
     useEffect(() => {
         CommentApi.listAllComment(props.userId, transaction.transactionId, (response) => {
@@ -137,6 +151,10 @@ export default function Transaction(props) {
                 comments.push(response.data);
                 setCommentValue("");
             })
+    }
+
+    const handleAddTag = (tagName) => {
+        props.actionCreateTag(tagName);
     }
 
     function CommentExample() {
@@ -209,7 +227,12 @@ export default function Transaction(props) {
                         <Typography variant="h6" component="h2" className={classes.title}>
                             {title}
                         </Typography>
-                        <Chip label="CS 542 Final Project" color="primary" />
+                        {
+                            tags.map((tag) =>
+                                <Chip label={tag.tagName} color="primary" />
+                            )
+                        }
+
                     </CardContent>
                 </CardActionArea>
             </Card>
@@ -322,6 +345,64 @@ export default function Transaction(props) {
                                         </List>
                                         <AddMemberDialog />
                                     </div>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="h6" style={{ paddingLeft: '16px', paddingBottom: '8px' }}>
+                                        Tags
+                                    </Typography>
+                                    <Autocomplete
+                                        value={value}
+                                        onChange={(event, newValue) => {
+                                            // Create a new value from the user input
+                                            if (newValue && newValue.inputValue) {
+                                                setValue({
+                                                    tagName: newValue.inputValue,
+                                                });
+                                                handleAddTag(newValue.inputValue);
+                                                return;
+                                            } 
+                                            setValue(newValue);
+                                        }}
+                                        filterOptions={(options, params) => {
+                                            const filtered = filter(options, params);
+
+                                            // Suggest the creation of a new value
+                                            if (params.inputValue !== '') {
+                                                filtered.push({
+                                                    inputValue: params.inputValue,
+                                                    tagName: `Add "${params.inputValue}"`,
+                                                });
+                                            }
+
+                                            return filtered;
+                                        }}
+                                        selectOnFocus
+                                        clearOnBlur
+
+                                        id="free-solo-with-text-demo"
+                                        options={tags}
+                                        getOptionLabel={(option) => {
+                                            // Value selected with enter, right from the input
+                                            if (typeof option === 'string') {
+                                                return option;
+                                            }
+                                            // Add "xxx" option created dynamically
+                                            if (option.inputValue) {
+                                                return option.inputValue;
+                                            }
+                                            // Regular option
+                                            return option.tagName;
+                                        }}
+                                        renderOption={(option) => option.tagName}
+                                        style={{ width: 300 }}
+                                        freeSolo
+                                        renderInput={(params) => (
+                                            <TextField 
+                                                {...params} 
+                                                label="Free solo with text demo" 
+                                                variant="outlined" />
+                                        )}
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>

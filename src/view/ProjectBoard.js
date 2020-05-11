@@ -58,6 +58,14 @@ class ProjectBoard extends Component {
                 console.log(this.state);
             });
         })
+        TagApi.listAllTags(this.state.projectId, (response) => {
+            this.setState({
+                tagList: response.data
+            }, () => {
+                console.log("taglist");
+                console.log(this.state.tagList);
+            })
+        })
     }
 
     addGroup(groupname) {
@@ -174,12 +182,8 @@ class ProjectBoard extends Component {
     }
 
     createTag(tagName) {
-        TagApi.createTag(
-            this.state.userId,
-            this.state.projectId,
-            {
-                tagName: tagName
-            },
+        console.log(this);
+        TagApi.createTag(this.state.userId, this.state.projectId, { tagName: tagName },
             (response) => {
                 this.setState({ tagList: this.state.tagList.push(response.data) });
             }
@@ -299,8 +303,10 @@ class ProjectBoard extends Component {
                                                     projectCreatorId={this.state.project.createrId}
                                                     transaction={transaction}
                                                     projectMembers={this.state.projectMembers}
+                                                    tags={this.state.tagList}
                                                     actionDelete={this.deleteTransaction}
-                                                    actionUpdate={this.updateTransaction} />
+                                                    actionUpdate={this.updateTransaction}
+                                                    actionCreateTag={this.createTag} />
                                             )
                                             :
                                             <div>{console.log(group)}</div>
