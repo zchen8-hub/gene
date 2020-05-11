@@ -8,7 +8,7 @@ class HttpService {
                     const response = JSON.parse(xhr.response);
                     callbackSuccess(response);
                 } else {
-                    alert("unable to process request: " + xhr.status);
+                    //alert("unable to process request: " + xhr.status);
                 }
             }
         }

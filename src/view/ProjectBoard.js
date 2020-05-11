@@ -23,6 +23,7 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { Redirect } from 'react-router-dom'
 
 import Transaction from './Transaction';
 import transactionApi from '../api/transaction';
@@ -41,6 +42,7 @@ class ProjectBoard extends Component {
             projectMembers: [],
             groupList: [],
             tagList: [],
+            redirect: false,
             onAddingGroup: false,
             inviteCode: '',
             onFocusingTitleId: "",
@@ -211,7 +213,17 @@ class ProjectBoard extends Component {
         })
     }
 
+    setRedirect(){
+        this.setState({
+            redirect: true
+          })
+    }
+
     render() {
+
+        if (this.state.redirect) {
+            return <Redirect to='/' />
+        }
 
         return (
             <div className="root" >
@@ -226,7 +238,7 @@ class ProjectBoard extends Component {
                         <Typography variant="h6"
                             className="title" > {this.props.location.state.projectName}
                         </Typography>
-                        <Button color="inherit" > Logout </Button>
+                        <Button color="inherit" onClick={() => this.setRedirect()}> Logout </Button>
                     </Toolbar>
                 </AppBar>
                 <Typography variant="h4" className="childOfRoot">
