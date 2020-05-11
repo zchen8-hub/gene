@@ -49,10 +49,10 @@ class ProjectBoard extends Component {
     componentDidMount() {
         projectApi.getProject(this.state.userId, this.state.projectId, (response) => {
             console.log(response.data);
-            this.setState({ 
-                project: response.data ,
+            this.setState({
+                project: response.data,
                 projectMembers: response.data.userDTOs,
-                groupList: response.data.groupDTOS.reverse()
+                groupList: response.data.groupDTOS
             }, () => {
                 console.log("user id: " + this.state.userId);
                 console.log(this.state);
@@ -207,13 +207,16 @@ class ProjectBoard extends Component {
                     Project Board
                 </Typography>
                 <Grid container spacing={0} className="childOfRoot" alignItems="center" style={{ paddingTop: '8px' }}>
-                    <Grid item >
+                    <Grid item>
                         <AvatarGroup>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                            <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-                            <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+                            {
+                                this.state.projectMembers.map((user) =>
+                                    <Tooltip title={user.username} key={user.uid}>
+                                        {/* user.username.split(' ') */}
+                                        <Avatar>{user.username.split(' ').reduce((acc, cur) => { return acc.slice(0, 1) + cur.slice(0, 1) }, "")}</Avatar>
+                                    </Tooltip>
+                                )
+                            }
                         </AvatarGroup>
                     </Grid>
                     <Grid item >
