@@ -71,9 +71,7 @@ class ProjectBoard extends Component {
     }
 
     deleteGroup(groupId) {
-        if (this.state.userId !== this.state.project.createrId) {
-            this.setState({ snackbarOpen: true })
-        } else {
+        if (this.state.userId === this.state.project.createrId) {
             groupApi.deleteGroup(this.state.projectId, groupId, (response) => {
                 if (response.code === "200") {
                     console.log("success");
@@ -116,9 +114,11 @@ class ProjectBoard extends Component {
     }
 
     deleteTransaction(groupId, transactionId) {
-        transactionApi.deleteTransaction(groupId, transactionId, (response) => {
-            window.location.reload(true);
-        })
+        if (this.state.userId === this.state.project.createrId) {
+            transactionApi.deleteTransaction(groupId, transactionId, (response) => {
+                window.location.reload(true);
+            })
+        }
     }
 
     handleGroupTitleFocused(event, groupId, groupName) {

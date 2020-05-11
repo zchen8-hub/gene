@@ -77,11 +77,7 @@ export default function Transaction(props) {
     useEffect(() => {
         CommentApi.listAllComment(props.userId, transaction.transactionId, (response) => {
             setComments(response.data);
-            //console.log("comments: " + comments);
         })
-        // console.log("transactionMembers");
-        // console.log(transactionMembers);
-        console.log(props.userId + " " + props.projectCreatorId);
     }, []);
 
     const handleDeleteTransaction = () => {
@@ -89,16 +85,28 @@ export default function Transaction(props) {
     }
 
     const handleDeleteMember = (uid) => {
+        console.log("handleDeleteMember");
+        console.log(uid);
         transactionApi.deleteUserFromTransaction(props.transaction.transactionId, uid, (response) => {
-            setTransactionMembers(transactionMembers.filter(member => member.uid !== uid));
+            if (response.code === "200") {
+                setTransaction(response.data);
+                setTransactionMembers(response.data.userDTOS);
+            }
+            console.log(transactionMembers);
         })
     }
 
     const handleAddmember = (uid) => {
+        console.log("handleAddmember");
+        console.log(uid);
         transactionApi.addUserToTransaction(props.transaction.transactionId, uid, (response) => {
-            setTransaction(response.data);
+            if (response.code === "200") {
+                setTransaction(response.data);
+                setTransactionMembers(response.data.userDTOS)
+                setAddMemberDialogOpen(false);
+            }
+            console.log(transactionMembers);
         })
-        //console.log("handleAddmember: " + uid);
     }
 
     const handleCloseDialog = () => {
@@ -115,7 +123,6 @@ export default function Transaction(props) {
 
     const handleCommentChange = (event) => {
         setCommentValue(event.target.value);
-        //console.log(commentValue);
     }
 
     const handleCommentSubmit = () => {
@@ -138,7 +145,7 @@ export default function Transaction(props) {
                 <Comment.Avatar as='a' src='https://api.adorable.io/avatars/211/abott@adorable' />
                 <Comment.Content>
                     <Comment.Author>
-                        {transactionMembers.find(member => member.uid === comment.createrId).username}
+                        {projectMembers.find(member => member.uid === comment.createrId).username}
                     </Comment.Author>
                     <Comment.Text>
                         {comment.comment}
@@ -177,7 +184,7 @@ export default function Transaction(props) {
             onClose={() => setAddMemberDialogOpen(false)}>
             <DialogTitle id="simple-dialog-title">Please select user</DialogTitle>
             <List>
-                {projectMembers.filter(member => member.uid !== props.transaction.creatorId).map((member) => (
+                {projectMembers.filter(member => !transactionMembers.find(m => m.uid === member.uid)).map((member) => (
                     <ListItem
                         button
                         onClick={() => handleAddmember(member.uid)}
