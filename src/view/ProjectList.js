@@ -122,7 +122,7 @@ class ProjectList extends Component {
                 projectList.push(
                     {
                         "name": project.projectName,
-                        "creator": this.props.location.state.username,
+                        "creator": project.creatorName,
                         "projectId": project.projectId,
                         "groupList": project.groupList
                     }
