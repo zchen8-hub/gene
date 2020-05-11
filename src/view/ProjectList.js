@@ -58,6 +58,13 @@ class ProjectList extends Component {
             projectName: listname.name
         }
         projectApi.createproject(this.props.match.params.userId, project, (response) => {
+            projectApi.listAllProject(this.state.userId, (response) => {
+                this.setState(
+                    {
+                        projects: response.data,
+                        isLoading: false
+                    });
+            });
             window.location.reload(true);
         })
     }
@@ -174,7 +181,7 @@ class ProjectList extends Component {
                                                 this.setState((prevState) => {
                                                     const project = [...prevState.projects];
                                                     this.createProject(newData);
-                                                    projects.push(newData);
+                                                    //projects.push(newData);
                                                     //Creator should always be the login user.
                                                     projects[project.length - 1].creator = this.props.location.state.username;
                                                     return { ...prevState, projects };
