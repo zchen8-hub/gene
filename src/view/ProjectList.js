@@ -54,7 +54,6 @@ class ProjectList extends Component {
     }
 
     createProject(listname) {
-        debugger;
         const project = {
             projectName: listname.name
         }
@@ -122,7 +121,7 @@ class ProjectList extends Component {
                 projectList.push(
                     {
                         "name": project.projectName,
-                        "creator": project.creatorName,
+                        "creator": this.props.location.state.username,
                         "projectId": project.projectId,
                         "groupList": project.groupList
                     }

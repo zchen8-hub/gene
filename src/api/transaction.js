@@ -50,13 +50,13 @@ class TransactionApi {
     }
 
     static addTagToTransaction(tid, tagId, callback) {
-        let url = `transaction/${tid}/user/${tagId}`;
+        let url = `transaction/${tid}/tag/${tagId}`;
 
         return httpService.post(url, null, callback);
     }
 
     static deleteTagFromTransaction(tid, tagId, callback) {
-        let url = `transaction/${tid}/user/${tagId}`;
+        let url = `transaction/${tid}/tag/${tagId}`;
 
         return httpService.delete(url, callback);
     }

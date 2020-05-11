@@ -18,6 +18,7 @@ import CommentApi from '../api/comment'
 import './css/Transaction.css';
 import 'semantic-ui-css/semantic.min.css';
 import TagApi from '../api/tag';
+import TransactionApi from '../api/transaction';
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
@@ -74,18 +75,8 @@ export default function Transaction(props) {
     const [projectMembers, setProjectMembers] = useState(props.projectMembers);
     const [commentValue, setCommentValue] = useState("");
     const [comments, setComments] = useState([]);
-    const [tags, setTags] = useState(props.tags);
-    // const tags = [
-    //     {
-    //         tagName: "123"
-    //     },
-    //     {
-    //         tagName: "456"
-    //     },
-    //     {
-    //         tagName: "789"
-    //     }
-    // ];
+    const [projectTags] = useState(props.tags);
+    const [transactionTags, setTransactionTags] = useState(props.transaction.tagDTOs);
     const [value, setValue] = React.useState(null);
 
     useEffect(() => {
@@ -153,8 +144,12 @@ export default function Transaction(props) {
             })
     }
 
-    const handleAddTag = (tagName) => {
-        props.actionCreateTag(tagName);
+    const handleAddTagToTransaction = (tagId) => {
+        console.log(tagId);
+        TransactionApi.addTagToTransaction(transaction.transactionId, tagId, (response) => {
+            debugger;
+            setTransactionTags(response.data.tagDTOs);
+        })
     }
 
     function CommentExample() {
@@ -228,8 +223,8 @@ export default function Transaction(props) {
                             {title}
                         </Typography>
                         {
-                            tags.map((tag) =>
-                                <Chip label={tag.tagName} color="primary" />
+                            transactionTags.map((tag) =>
+                                <Chip key={tag.tagId} label={tag.tagName} color="primary" />
                             )
                         }
 
@@ -351,6 +346,16 @@ export default function Transaction(props) {
                                         Tags
                                     </Typography>
                                     <Autocomplete
+                                        id="combo-box-demo"
+                                        onChange={(event, value) => {
+                                            handleAddTagToTransaction(value.tagId);
+                                        }}
+                                        options={projectTags}
+                                        getOptionLabel={(option) => option.tagName}
+                                        style={{ width: 300 }}
+                                        renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+                                    />
+                                    {/* <Autocomplete
                                         value={value}
                                         onChange={(event, newValue) => {
                                             // Create a new value from the user input
@@ -402,7 +407,7 @@ export default function Transaction(props) {
                                                 label="Free solo with text demo" 
                                                 variant="outlined" />
                                         )}
-                                    />
+                                    /> */}
                                 </Grid>
                             </Grid>
                         </Grid>

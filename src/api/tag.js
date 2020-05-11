@@ -8,19 +8,19 @@ class TagApi {
     }
 
     static createTag(uid, pid, tag, callback) {
-        let url = 'user/${uid}/project/${pid}/tag';
+        let url = `user/${uid}/project/${pid}/tag`;
 
         return httpService.post(url, tag, callback);
     }
 
-    static updateTag(uid, pid, tagid, tag, callback) {
-        let url = 'user/${uid}/project/${pid}/tag/${tagid}';
+    static updateTag(uid, pid, tagId, tag, callback) {
+        let url = `user/${uid}/project/${pid}/tag/${tagId}`;
 
         return httpService.put(url, tag, callback);
     }
 
-    static deleteTag(uid, pid, callback) {
-        let url = 'user/${uid}/project/${pid}/tag/${tagid}';
+    static deleteTag(uid, pid, tagId, callback) {
+        let url = `user/${uid}/project/${pid}/tag/${tagId}`;
 
         return httpService.delete(url, callback);
     }

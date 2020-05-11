@@ -19,6 +19,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Chip from '@material-ui/core/Chip';
+import Paper from '@material-ui/core/Paper';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import Transaction from './Transaction';
 import transactionApi from '../api/transaction';
@@ -43,6 +47,7 @@ class ProjectBoard extends Component {
             onFocusingTitleValue: "",
             groupTitleBtn: null,
             inviCodeDialogToggle: false,
+            addTagValue: ""
         };
     }
 
@@ -181,26 +186,40 @@ class ProjectBoard extends Component {
         })
     }
 
-    createTag(tagName) {
-        console.log(this);
-        TagApi.createTag(this.state.userId, this.state.projectId, { tagName: tagName },
-            (response) => {
-                this.setState({ tagList: this.state.tagList.push(response.data) });
-            }
-        )
+    handleCreateTag() {
+        console.log("handleCreateTag");
+        if (this.state.addTagValue) {
+            TagApi.createTag(this.state.userId, this.state.projectId, { tagName: this.state.addTagValue },
+                (response) => {
+                    debugger;
+                    this.setState({
+                        addTagValue: ""
+                    });
+                    window.location.reload(true);
+                }
+            )
+        }
+    }
+
+    handleDeleteTag(tagId) {
+        TagApi.deleteTag(this.state.userId, this.state.projectId, tagId, (response) => {
+            alert(response.msg);
+            window.location.reload(true);
+        })
     }
 
     render() {
+
         return (
             <div className="root" >
                 <AppBar position="static">
                     <Toolbar >
-                        <IconButton edge="start"
+                        {/* <IconButton edge="start"
                             className="menuButton"
                             color="inherit"
                             aria-label="menu" >
                             <MenuIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <Typography variant="h6"
                             className="title" > {this.props.location.state.projectName}
                         </Typography>
@@ -210,7 +229,7 @@ class ProjectBoard extends Component {
                 <Typography variant="h4" className="childOfRoot">
                     Project Board
                 </Typography>
-                <Grid container spacing={0} className="childOfRoot" alignItems="center" style={{ paddingTop: '8px' }}>
+                <Grid container spacing={2} className="childOfRoot" alignItems="center" style={{ paddingTop: '8px' }}>
                     <Grid item>
                         <AvatarGroup>
                             {
@@ -260,6 +279,46 @@ class ProjectBoard extends Component {
                             </DialogActions>
                         </Dialog>
                     </Grid>
+                    <Grid item>
+                        <TextField
+                            id="standard-basic"
+                            label="Enter Tag"
+                            value={this.state.addTagValue}
+                            onChange={(event) => this.setState({ addTagValue: event.target.value })} />
+                    </Grid>
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => this.handleCreateTag()}
+                        >
+                            Add Tag
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Paper
+                            component="ul"
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                flexWrap: 'wrap',
+                                listStyle: 'none',
+                                padding: '4px',
+                                margin: 0,
+                            }}>
+                            {this.state.tagList.map((data) => {
+                                return (
+                                    <li key={data.tagId}>
+                                        <Chip
+                                            label={data.tagName}
+                                            onDelete={() => this.handleDeleteTag(data.tagId)}
+                                            style={{ margin: '4px', }}
+                                        />
+                                    </li>
+                                );
+                            })}
+                        </Paper>
+                    </Grid>
                 </Grid>
 
                 <Grid container spacing={3} wrap="nowrap" style={{ padding: '24px' }}>
@@ -306,7 +365,7 @@ class ProjectBoard extends Component {
                                                     tags={this.state.tagList}
                                                     actionDelete={this.deleteTransaction}
                                                     actionUpdate={this.updateTransaction}
-                                                    actionCreateTag={this.createTag} />
+                                                />
                                             )
                                             :
                                             <div>{console.log(group)}</div>
