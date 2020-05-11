@@ -355,59 +355,6 @@ export default function Transaction(props) {
                                         style={{ width: 300 }}
                                         renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
                                     />
-                                    {/* <Autocomplete
-                                        value={value}
-                                        onChange={(event, newValue) => {
-                                            // Create a new value from the user input
-                                            if (newValue && newValue.inputValue) {
-                                                setValue({
-                                                    tagName: newValue.inputValue,
-                                                });
-                                                handleAddTag(newValue.inputValue);
-                                                return;
-                                            } 
-                                            setValue(newValue);
-                                        }}
-                                        filterOptions={(options, params) => {
-                                            const filtered = filter(options, params);
-
-                                            // Suggest the creation of a new value
-                                            if (params.inputValue !== '') {
-                                                filtered.push({
-                                                    inputValue: params.inputValue,
-                                                    tagName: `Add "${params.inputValue}"`,
-                                                });
-                                            }
-
-                                            return filtered;
-                                        }}
-                                        selectOnFocus
-                                        clearOnBlur
-
-                                        id="free-solo-with-text-demo"
-                                        options={tags}
-                                        getOptionLabel={(option) => {
-                                            // Value selected with enter, right from the input
-                                            if (typeof option === 'string') {
-                                                return option;
-                                            }
-                                            // Add "xxx" option created dynamically
-                                            if (option.inputValue) {
-                                                return option.inputValue;
-                                            }
-                                            // Regular option
-                                            return option.tagName;
-                                        }}
-                                        renderOption={(option) => option.tagName}
-                                        style={{ width: 300 }}
-                                        freeSolo
-                                        renderInput={(params) => (
-                                            <TextField 
-                                                {...params} 
-                                                label="Free solo with text demo" 
-                                                variant="outlined" />
-                                        )}
-                                    /> */}
                                 </Grid>
                             </Grid>
                         </Grid>

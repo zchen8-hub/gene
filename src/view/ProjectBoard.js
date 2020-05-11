@@ -96,6 +96,7 @@ class ProjectBoard extends Component {
     }
 
     addTransaction(groupId, creatorId) {
+        
         transactionApi.createTransaction(
             groupId,
             {
@@ -191,7 +192,6 @@ class ProjectBoard extends Component {
         if (this.state.addTagValue) {
             TagApi.createTag(this.state.userId, this.state.projectId, { tagName: this.state.addTagValue },
                 (response) => {
-                    debugger;
                     this.setState({
                         addTagValue: ""
                     });
