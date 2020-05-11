@@ -24,6 +24,7 @@ import Transaction from './Transaction';
 import transactionApi from '../api/transaction';
 import groupApi from '../api/group';
 import projectApi from '../api/project';
+import TagApi from '../api/tag';
 
 class ProjectBoard extends Component {
 
@@ -50,11 +51,7 @@ class ProjectBoard extends Component {
             this.setState({ project: response.data });
             this.setState({ projectMembers: response.data.userDTOs });
             this.setState({ groupList: response.data.groupDTOS.reverse() })
-            console.log(this.state.project);
-            console.log(this.state.projectMembers);
-            console.log(this.state.groupList);
         })
-
         console.log("user id: " + this.state.userId);
     }
 
@@ -166,6 +163,19 @@ class ProjectBoard extends Component {
             debugger;
             this.setState({ inviteCode: response.msg });
         })
+    }
+
+    createTag(tagName) {
+        TagApi.createTag(
+            this.state.userId,
+            this.state.projectId,
+            {
+                tagName: tagName
+            },
+            (response) => {
+                this.setState({ tagList: this.state.tagList.push(response.data) });
+            }
+        )
     }
 
     render() {

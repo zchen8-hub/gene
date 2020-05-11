@@ -54,6 +54,7 @@ class ProjectList extends Component {
     }
 
     createProject(listname) {
+        debugger;
         const project = {
             projectName: listname.name
         }
