@@ -53,6 +53,7 @@ class ProjectBoard extends Component {
             this.setState({ groupList: response.data.groupDTOS.reverse() })
         })
         console.log("user id: " + this.state.userId);
+        console.log(this);
     }
 
     addGroup(groupname) {
@@ -66,6 +67,8 @@ class ProjectBoard extends Component {
     }
 
     deleteGroup(groupId) {
+        //if (userId !== groupList.find(group => group.groupId = groupId).)
+
         groupApi.deleteGroup(this.state.projectId, groupId, (response) => {
             if (response.code === "200") {
                 console.log("success");

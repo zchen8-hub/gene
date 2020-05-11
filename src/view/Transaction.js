@@ -10,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Chip from '@material-ui/core/Chip';
 
 import transactionApi from '../api/transaction'
 import CommentApi from '../api/comment'
@@ -201,6 +202,7 @@ export default function Transaction(props) {
                         <Typography variant="h6" component="h2" className={classes.title}>
                             {title}
                         </Typography>
+                        <Chip label="CS 542 Final Project" color="primary" />
                     </CardContent>
                 </CardActionArea>
             </Card>
