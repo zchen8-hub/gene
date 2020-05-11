@@ -49,6 +49,8 @@ class ProjectBoard extends Component {
             inviCodeDialogToggle: false,
             addTagValue: ""
         };
+        this.deleteTransaction = this.deleteTransaction.bind(this);
+        this.updateTransaction = this.updateTransaction.bind(this);
     }
 
     componentDidMount() {
@@ -128,6 +130,7 @@ class ProjectBoard extends Component {
     }
 
     deleteTransaction(groupId, transactionId) {
+        debugger;
         if (this.state.userId === this.state.project.createrId) {
             transactionApi.deleteTransaction(groupId, transactionId, (response) => {
                 window.location.reload(true);

@@ -147,7 +147,6 @@ export default function Transaction(props) {
     const handleAddTagToTransaction = (tagId) => {
         console.log(tagId);
         TransactionApi.addTagToTransaction(transaction.transactionId, tagId, (response) => {
-            debugger;
             setTransactionTags(response.data.tagDTOs);
         })
     }
