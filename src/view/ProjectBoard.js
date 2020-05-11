@@ -32,9 +32,9 @@ class ProjectBoard extends Component {
         super(props);
         this.state = {
             projectId: this.props.match.params.projectId,
+            userId: props.location.state.userId,
             project: {},
             projectMembers: [],
-            userId: props.location.state.userId,
             groupList: [],
             tagList: [],
             onAddingGroup: false,
@@ -43,17 +43,21 @@ class ProjectBoard extends Component {
             onFocusingTitleValue: "",
             groupTitleBtn: null,
             inviCodeDialogToggle: false,
-        }
+        };
     }
 
     componentDidMount() {
         projectApi.getProject(this.state.userId, this.state.projectId, (response) => {
-            this.setState({ project: response.data });
-            this.setState({ projectMembers: response.data.userDTOs });
-            this.setState({ groupList: response.data.groupDTOS.reverse() })
+            console.log(response.data);
+            this.setState({ 
+                project: response.data ,
+                projectMembers: response.data.userDTOs,
+                groupList: response.data.groupDTOS.reverse()
+            }, () => {
+                console.log("user id: " + this.state.userId);
+                console.log(this.state);
+            });
         })
-        console.log("user id: " + this.state.userId);
-        console.log(this);
     }
 
     addGroup(groupname) {
@@ -67,15 +71,17 @@ class ProjectBoard extends Component {
     }
 
     deleteGroup(groupId) {
-        //if (userId !== groupList.find(group => group.groupId = groupId).)
-
-        groupApi.deleteGroup(this.state.projectId, groupId, (response) => {
-            if (response.code === "200") {
-                console.log("success");
-                let newGroupList = this.state.groupList.filter((group) => group.groupId !== groupId);
-                this.setState({ groupList: newGroupList });
-            }
-        })
+        if (this.state.userId !== this.state.project.createrId) {
+            this.setState({ snackbarOpen: true })
+        } else {
+            groupApi.deleteGroup(this.state.projectId, groupId, (response) => {
+                if (response.code === "200") {
+                    console.log("success");
+                    let newGroupList = this.state.groupList.filter((group) => group.groupId !== groupId);
+                    this.setState({ groupList: newGroupList });
+                }
+            })
+        }
     }
 
     addTransaction(groupId, creatorId) {
@@ -163,7 +169,6 @@ class ProjectBoard extends Component {
 
     generateInviteCode() {
         projectApi.createInviteCode(this.state.userId, this.state.projectId, (response) => {
-            debugger;
             this.setState({ inviteCode: response.msg });
         })
     }
@@ -269,12 +274,17 @@ class ProjectBoard extends Component {
                                         style={group.groupId === this.state.onFocusingTitleId ? { display: 'inline-flex' } : { display: 'none' }}
                                         onChange={(event) => this.setState({ onFocusingTitleValue: event.target.value })}
                                         onBlur={() => this.handleGroupTitleBlur()} />
-                                    <IconButton
-                                        aria-label="delete"
-                                        style={{ marginLeft: 'auto', paddingTop: '0px' }}
-                                        onClick={() => this.deleteGroup(group.groupId)}>
-                                        <DeleteIcon />
-                                    </IconButton>
+                                    {
+                                        this.state.userId === this.state.project.createrId ?
+                                            <IconButton
+                                                aria-label="delete"
+                                                style={{ marginLeft: 'auto', paddingTop: '0px' }}
+                                                onClick={() => this.deleteGroup(group.groupId)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                            :
+                                            null
+                                    }
                                 </CardContent>
                                 <CardContent style={{ paddingTop: '0px', paddingBottom: '8px' }} >
                                     {
@@ -283,6 +293,7 @@ class ProjectBoard extends Component {
                                                 <Transaction
                                                     key={transaction.transactionId}
                                                     userId={this.state.userId}
+                                                    projectCreatorId={this.state.project.createrId}
                                                     transaction={transaction}
                                                     projectMembers={this.state.projectMembers}
                                                     actionDelete={this.deleteTransaction}

@@ -76,11 +76,12 @@ export default function Transaction(props) {
 
     useEffect(() => {
         CommentApi.listAllComment(props.userId, transaction.transactionId, (response) => {
-            setComments(response.data);   
+            setComments(response.data);
             //console.log("comments: " + comments);
         })
-        console.log("transactionMembers");
-        console.log(transactionMembers);
+        // console.log("transactionMembers");
+        // console.log(transactionMembers);
+        console.log(props.userId + " " + props.projectCreatorId);
     }, []);
 
     const handleDeleteTransaction = () => {
@@ -118,7 +119,6 @@ export default function Transaction(props) {
     }
 
     const handleCommentSubmit = () => {
-        debugger;
         let comment = {
             comment: commentValue
         }
@@ -224,9 +224,14 @@ export default function Transaction(props) {
                             onChange={(event) => setTitle(event.target.value)}
                             onBlur={(event) => props.transaction.title = event.target.value}
                         />
-                        <IconButton aria-label="delete" className={classes.IconButton} onClick={handleDeleteTransaction}>
-                            <DeleteIcon />
-                        </IconButton>
+                        {
+                            props.userId === props.projectCreatorId ?
+                                <IconButton aria-label="delete" className={classes.IconButton} onClick={handleDeleteTransaction}>
+                                    <DeleteIcon />
+                                </IconButton>
+                                :
+                                null
+                        }
                         <IconButton aria-label="close" className={classes.IconButton} onClick={handleCloseDialog}>
                             <CloseIcon />
                         </IconButton>
